@@ -3,7 +3,7 @@ package FacturadeDB.Facturade.Client;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Table(name = "Klienci")
+@Table(name = "klienci")
 @Entity
 public class client implements Serializable {
 

@@ -2,7 +2,7 @@ package FacturadeDB.Facturade.Product;
 
 import javax.persistence.*;
 
-@Table( name = "Produkty")
+@Table( name = "produkty")
 @Entity
 public class product {
 

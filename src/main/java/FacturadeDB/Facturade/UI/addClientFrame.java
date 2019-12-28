@@ -8,7 +8,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class addClientFrame{
-	private DBController _controller = new DBController();
 	addClientFrame(final clientList clientList){
 		final JTextField clientNameF = new JTextField();
 		final JTextField clientSurnameF = new JTextField();

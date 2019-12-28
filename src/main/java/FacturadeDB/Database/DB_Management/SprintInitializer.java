@@ -9,5 +9,4 @@ public class SprintInitializer {
             SpringApplication.run(SprintInitializer.class, args);
         }
 
-
 }
