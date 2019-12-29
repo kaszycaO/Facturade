@@ -1,7 +1,6 @@
 package FacturadeDB.Facturade.UI;
 
 import FacturadeDB.Facturade.Client.clientList;
-import FacturadeDB.Database.DB_Management.BackendManager;
 import FacturadeDB.Facturade.Factures.factureCreator;
 import FacturadeDB.Facturade.Product.product;
 import FacturadeDB.Facturade.Product.productsList;
@@ -21,7 +20,6 @@ import javax.swing.JTextArea;
 class AppPanel extends JPanel implements ActionListener{
 	
 	private AppWindow _frame;
-	private BackendManager _manager;
 	private productsList prodList;
     private JButton _createFacBtn;
     private JButton _addProdToFacBtn;

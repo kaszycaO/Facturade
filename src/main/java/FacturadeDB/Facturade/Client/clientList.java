@@ -19,13 +19,12 @@ public class clientList extends Choice {
 		}
 		else { 
 			listOfClients.add(_client);
-			//_client.setClientID(_currentClientID);
 			add("[" + _currentClientID + "] " + _client.getClientName() + " " + _client.getClientSurname() +  "  NIP: " + _client.getClientNIP());
 			_currentClientID++;
 		}
 	}
 	
-	public List<client> getListOfCLients() {
+	public List<client> getListOfClients() {
 		return listOfClients;
 	}
 	

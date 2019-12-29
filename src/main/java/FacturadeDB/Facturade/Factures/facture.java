@@ -3,12 +3,14 @@ package FacturadeDB.Facturade.Factures;
 import FacturadeDB.Facturade.Product.product;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 @Table(name = "Faktury")
+@Entity
 public class facture implements Serializable{
 	private static final long serialVersionUID = -8820364390362269465L;
 	@Id
@@ -23,8 +25,10 @@ public class facture implements Serializable{
 	@Column( name = "data_sprzedazy")
 	private String _factureDate;
 	private String _facInSTR;
+
 	private ArrayList<product> _productList;
-	
+
+	public facture(){};
 	facture(ArrayList<product> prodList, int ID, String facSTR){
 		_productList = prodList;
 		_factureID = ID;

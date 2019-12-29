@@ -1,6 +1,5 @@
 package FacturadeDB.Facturade.UI;
 
-import FacturadeDB.Database.DB_Management.DBController;
 import FacturadeDB.Facturade.Client.client;
 import FacturadeDB.Facturade.Client.clientList;
 

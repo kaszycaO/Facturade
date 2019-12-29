@@ -1,23 +1,15 @@
 package FacturadeDB.Facturade.UI;
 
-
-import FacturadeDB.Database.DB_Management.DBController;
 import FacturadeDB.Facturade.Client.client;
 import FacturadeDB.Facturade.Client.clientList;
 import FacturadeDB.Facturade.Factures.factureCreator;
 import FacturadeDB.Facturade.Product.productsList;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
-import org.springframework.context.*;
 
-@Service
 public class buttonController {
 	private final AppPanel _panel;
 	buttonController(final AppPanel panel){
@@ -26,11 +18,7 @@ public class buttonController {
 	
 	public void doCertainAction(final String _action) {
 		switch(_action) {
-
 			case "Save facture":
-				//ApplicationContext context = new
-				//DBController test = (DBController) context
-				// = test.addNewClient(new client("test","test",13231,"312312","1321312","1231231","131231"));
 				break;
 			case "Add product to facture":
 				addProdToFacture();
@@ -101,7 +89,7 @@ public class buttonController {
 	}
 	
 	public void addNewClient() {
-		new addClientFrame(_panel.getClientList());
+		addClientFrame _addFrame = new addClientFrame(_panel.getClientList());
 	}
 	
 	public void showFactures() {

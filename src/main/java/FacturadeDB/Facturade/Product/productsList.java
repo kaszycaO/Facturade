@@ -1,7 +1,5 @@
 package FacturadeDB.Facturade.Product;
 
-import FacturadeDB.Database.DB_Management.ResponseParser;
-
 import java.awt.Choice;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +9,6 @@ import javax.swing.*;
 public class productsList extends Choice{
 	
 	private static final long serialVersionUID = 846808656429232480L;
-	
-	private static ResponseParser parser;
 	
 	private static List<product> listOfProducts;
 
@@ -34,7 +30,6 @@ public class productsList extends Choice{
 	public productsList(){
 		super();
 		listOfProducts = new ArrayList<>();
-		parser = new ResponseParser();
 	}
 	
 	public product getProductFromList(final int index) {

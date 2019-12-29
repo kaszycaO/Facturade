@@ -1,9 +1,8 @@
 package FacturadeDB.Facturade.Factures;
 
 import FacturadeDB.Facturade.Client.client;
-import FacturadeDB.Facturade.Product.product;
-
 import java.awt.Font;
+import FacturadeDB.Facturade.Product.product;
 import java.util.ArrayList;
 
 import javax.swing.JTextArea;
