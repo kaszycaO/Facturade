@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 @Table(name = "klienci")
 @Entity
-public class client implements Serializable {
+public class Client implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,9 +26,9 @@ public class client implements Serializable {
 	@Column(name = "miasto")
 	private String _city;
 
-	public client(){};
+	public Client(){};
 	
-	public client(String clientName, String clientSurname, int pesel, String adress, String postCode, String city, String clientNIP){
+	public Client(String clientName, String clientSurname, int pesel, String adress, String postCode, String city, String clientNIP){
 		_clientName = clientName;
 		_clientSurname = clientSurname;
 		_pesel = pesel;

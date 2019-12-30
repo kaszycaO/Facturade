@@ -1,25 +1,28 @@
 package FacturadeDB.Facturade.Factures;
 
-import FacturadeDB.Facturade.Client.client;
+import FacturadeDB.Facturade.Client.Client;
+
 import java.awt.Font;
-import FacturadeDB.Facturade.Product.product;
+
+import FacturadeDB.Facturade.Product.Product;
+
 import java.util.ArrayList;
 
 import javax.swing.JTextArea;
 
-public class factureCreator {
+public class FactureCreator {
 	private final static String newline = "\n";
-	final private ArrayList<product> _newProdList;
+	final private ArrayList<Product> _newProdList;
 	final private JTextArea _printingArea;
 	
 	
-	public factureCreator(JTextArea printingArea){
+	public FactureCreator(JTextArea printingArea){
 		_printingArea = printingArea;
-		_newProdList = new ArrayList<product>();
+		_newProdList = new ArrayList<>();
 		
 	}
 	
-	public void printFacture(final client _client) {
+	public void printFacture(final Client _client) {
 		_printingArea.setText("");
 		_printingArea.setFont(new Font("Serif",Font.BOLD,16));
 		_printingArea.append(newline);
@@ -28,9 +31,9 @@ public class factureCreator {
 		
 		int sum = 0;
 
-		for (product product : _newProdList) {
-			//_printingArea.append(product.getNameOfProduct() + " " + product.getPriceOfProduct() + " " + product.getQuantityOfProduct() + newline);
-			//sum += product.getPriceOfProduct() * product.getQuantityOfProduct();
+		for (Product product : _newProdList) {
+			_printingArea.append(product.getNameOfProduct() + " " + product.getPriceOfProduct() + " " + product.get_stockQuantity() + newline);
+			sum += product.getPriceOfProduct() * product.get_stockQuantity();
 		}
 		
 		_printingArea.append(newline + newline);
@@ -39,12 +42,12 @@ public class factureCreator {
 	}
 	
 	
-	public void addProduct(final product _product) {
+	public void addProduct(final Product _product) {
 		_newProdList.add(_product);
 	}
 	
-	/*public void saveFacture(final client _client) {
-		_client.addFacture(new facture(_newProdList, _client.getFactureList().size() + 1,_printingArea.getText()));
+	public void saveFacture(final Client _client) {
+		//_client.addFacture(new Facture(_newProdList, _client.getFactureList().size() + 1,_printingArea.getText()));
 		_printingArea.setText("");
-	}*/
+	}
 }

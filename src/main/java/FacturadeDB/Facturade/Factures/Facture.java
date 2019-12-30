@@ -1,6 +1,6 @@
 package FacturadeDB.Facturade.Factures;
 
-import FacturadeDB.Facturade.Product.product;
+import FacturadeDB.Facturade.Product.Product;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @Table(name = "Faktury")
 @Entity
-public class facture implements Serializable{
+public class Facture implements Serializable{
 	private static final long serialVersionUID = -8820364390362269465L;
 	@Id
 	@Column( name = "id")
@@ -26,19 +26,19 @@ public class facture implements Serializable{
 	private String _factureDate;
 	private String _facInSTR;
 
-	private ArrayList<product> _productList;
+	private ArrayList<Product> _productList;
 
-	public facture(){};
-	facture(ArrayList<product> prodList, int ID, String facSTR){
+	public Facture(){};
+	Facture(ArrayList<Product> prodList, int ID, String facSTR){
 		_productList = prodList;
 		_factureID = ID;
 		_facInSTR = facSTR;
 	}
 	
-	public void addproduct(final product product) {
+	public void addproduct(final Product product) {
 		_productList.add(product);
 	}
-	public void setProductList(final ArrayList<product> prodList) {
+	public void setProductList(final ArrayList<Product> prodList) {
 		_productList = prodList;
 	}
 	
@@ -50,7 +50,7 @@ public class facture implements Serializable{
 		return _facInSTR;
 	}
 	
-	public ArrayList<product> getProductListFromFac() {
+	public ArrayList<Product> getProductListFromFac() {
 		return _productList;
 	}
 }	

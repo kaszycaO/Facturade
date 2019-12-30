@@ -1,13 +1,14 @@
 package FacturadeDB.Facturade.UI;
 
-import FacturadeDB.Facturade.Client.client;
-import FacturadeDB.Facturade.Client.clientList;
+import FacturadeDB.Database.DB_Management.ClientDAO;
+import FacturadeDB.Facturade.Client.Client;
+import FacturadeDB.Facturade.Client.ClientChoiceList;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-public class addClientFrame{
-	addClientFrame(final clientList clientList){
+public class AddClientFrame {
+	AddClientFrame(final ClientChoiceList clientList){
 		final JTextField clientNameF = new JTextField();
 		final JTextField clientSurnameF = new JTextField();
 		final JTextField adressF = new JTextField();
@@ -33,12 +34,14 @@ public class addClientFrame{
 			}
 			catch(NumberFormatException ex) {
 				try {
+					ClientDAO clientDao = new ClientDAO();
 					if(clientNIPF.getText().equals("-")) {
-						//_controller.create(clientNameF.getText(),clientSurnameF.getText(),Integer.parseInt(clientPeselF.getText()),adressF.getText(),clientPostCodeF.getText(),clientCityF.getText(),clientNIPF.getText());
+						Client tester = new Client(clientNameF.getText(),clientSurnameF.getText(),Integer.parseInt(clientPeselF.getText()),adressF.getText(),clientPostCodeF.getText(),clientCityF.getText(),null);
+						clientDao.save(tester);
 					}
 					else {
-						Integer.parseInt(clientNIPF.getText());
-						//_controller.create(clientNameF.getText(),clientSurnameF.getText(),Integer.parseInt(clientPeselF.getText()),adressF.getText(),clientPostCodeF.getText(),clientCityF.getText(),clientNIPF.getText());
+						Client tester = new Client(clientNameF.getText(),clientSurnameF.getText(),Integer.parseInt(clientPeselF.getText()),adressF.getText(),clientPostCodeF.getText(),clientCityF.getText(),clientNIPF.getText());
+						clientDao.save(tester);
 					}
 				}
 				catch(NumberFormatException ex2) {
@@ -47,8 +50,5 @@ public class addClientFrame{
 			}
 		}
 	}
-	
-	private void addNewClient(final String clientName, final String clientSurname,final int pesel, final String adress,final String postCode,final String city,final String clientNIP, final clientList _clientList) {
-		_clientList.addClientToList(new client(clientName,clientSurname,pesel,adress,postCode,city,clientNIP));
-	}
+
 }

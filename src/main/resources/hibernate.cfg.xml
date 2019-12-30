@@ -8,9 +8,9 @@
         <property name="hibernate.connection.password">Siusiak123</property>
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <mapping class="FacturadeDB.Facturade.Client.client"/>
-        <mapping class="FacturadeDB.Facturade.Product.product"/>
-        <mapping class="FacturadeDB.Facturade.Factures.facture"/>
+        <mapping class="FacturadeDB.Facturade.Client.Client"/>
+        <mapping class="FacturadeDB.Facturade.Product.Product"/>
+        <mapping class="FacturadeDB.Facturade.Factures.Facture"/>
 
     </session-factory>
 </hibernate-configuration>
