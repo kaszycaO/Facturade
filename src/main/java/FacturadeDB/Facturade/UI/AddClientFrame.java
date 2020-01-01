@@ -34,20 +34,24 @@ public class AddClientFrame {
 			}
 			catch(NumberFormatException ex) {
 				try {
-					ClientDAO clientDao = new ClientDAO();
-					if(clientNIPF.getText().equals("-")) {
-						Client tester = new Client(clientNameF.getText(),clientSurnameF.getText(),Integer.parseInt(clientPeselF.getText()),adressF.getText(),clientPostCodeF.getText(),clientCityF.getText(),null);
-						clientDao.save(tester);
-					}
-					else {
-						Client tester = new Client(clientNameF.getText(),clientSurnameF.getText(),Integer.parseInt(clientPeselF.getText()),adressF.getText(),clientPostCodeF.getText(),clientCityF.getText(),clientNIPF.getText());
-						clientDao.save(tester);
-					}
+					addNewClient(clientNameF, clientSurnameF, adressF, clientPeselF, clientPostCodeF, clientCityF, clientNIPF);
 				}
 				catch(NumberFormatException ex2) {
 					JOptionPane.showMessageDialog(null, "Wprowadziles bledny NIP!");
 				}
 			}
+		}
+	}
+
+	private void addNewClient(JTextField clientNameF, JTextField clientSurnameF, JTextField adressF, JTextField clientPeselF, JTextField clientPostCodeF, JTextField clientCityF, JTextField clientNIPF) {
+		ClientDAO clientDao = new ClientDAO();
+		if(clientNIPF.getText().equals("-")) {
+			Client tester = new Client(clientNameF.getText(),clientSurnameF.getText(),Integer.parseInt(clientPeselF.getText()),adressF.getText(),clientPostCodeF.getText(),clientCityF.getText(),null);
+			clientDao.save(tester);
+		}
+		else {
+			Client tester = new Client(clientNameF.getText(),clientSurnameF.getText(),Integer.parseInt(clientPeselF.getText()),adressF.getText(),clientPostCodeF.getText(),clientCityF.getText(),clientNIPF.getText());
+			clientDao.save(tester);
 		}
 	}
 
