@@ -2,4 +2,4 @@
 - ogarnac klase faktur(tworzenie, wprowadzania do bd itd)
 - zwracanie ID po dodaniu do MYSQL
 - reload informacji po utworzeniu nowej faktury (update stock'u itd.)
-- scrollPane dla POdgladu faktur
+- scrollPane dla Podgladu faktur

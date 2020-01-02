@@ -1,5 +1,6 @@
 package FacturadeDB.Facturade.UI;
 
+import FacturadeDB.Database.DB_Management.HibernateFactory;
 import FacturadeDB.Facturade.Client.ClientChoiceList;
 import FacturadeDB.Facturade.Factures.FactureCreator;
 import FacturadeDB.Facturade.Product.Product;
@@ -77,7 +78,9 @@ class MainPanel extends JPanel implements ActionListener{
         c.weightx = 0.1;
         c.weighty = 0;
         c.insets = new Insets(20,20,5,20);
-        add(_addProdToListBtn,c);
+        if(!HibernateFactory.username.equals("Pracownik")){
+            add(_addProdToListBtn,c);
+        }
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;

@@ -11,7 +11,23 @@
 ----> alter table Faktury add Foreign key(id_produktu) references Produkty(id)
 ----> create index data_idx on Faktury(data_sprzedazy)
 
-----> create table Produkty (id int auto_increment primary key, nazwa varchar(64), cena_sztuki int, zasoby int);
+----> create table Produkty (id int auto_increment primary key, nazwa varchar(64), cena_sztuki float, zasoby int);
 
 ----> create index name_idx on Produkty(nazwa)
 
+----------------------------------Tworzenie uzytkownikow--------------------------------------
+
+                         [Administrator]
+----> CREATE USER 'Administrator'@'localhost' IDENTIFIED BY 'root';
+----> GRANT ALL PRIVILEGES ON FacturadeDB.* TO 'Administrator'@'localhost';
+----> FLUSH PRIVILEGES;
+                         [Kierownik]
+----> CREATE USER 'Kierownik'@'localhost' IDENTIFIED BY 'manager';
+----> GRANT SELECT,INSERT,DELETE,UPDATE ON FacturadeDB.* TO 'Kierownik'@'localhost';
+----> FLUSH PRIVILEGES;
+                         [Pracownik]
+----> CREATE USER 'Pracownik'@'localhost' IDENTIFIED BY 'worm';
+----> GRANT INSERT,SELECT ON FacturadeDB.faktury TO 'Pracownik'@'localhost';
+----> GRANT INSERT,SELECT ON FacturadeDB.klienci TO 'Pracownik'@'localhost';
+----> GRANT SELECT ON FacturadeDB.produkty TO 'Pracownik'@'localhost';
+----> FLUSH PRIVILEGES;

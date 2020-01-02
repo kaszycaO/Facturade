@@ -11,11 +11,13 @@ public class HibernateFactory {
 
     public static String username;
     public static String password;
-    Configuration configuration = new Configuration();
+    private Configuration configuration = new Configuration();
 
+    public HibernateFactory(){
+        setHibernateConfiguration();
+    }
     public SessionFactory getSessionFactory() {
-
-        setHibernateConfiguration("root","root");
+        
         configuration.configure();
 
         StandardServiceRegistryBuilder registryBuilder =
@@ -24,7 +26,7 @@ public class HibernateFactory {
         return sessionFactory;
     }
 
-    public void setHibernateConfiguration(String username, String password){
+    public void setHibernateConfiguration(){
         configuration.setProperty("hibernate.connection.driver_class","com.mysql.cj.jdbc.Driver");
         configuration.setProperty("hibernate.connection.url","jdbc:mysql://localhost:3306/FacturadeDB");
         configuration.setProperty("hibernate.connection.username",username);
@@ -34,5 +36,9 @@ public class HibernateFactory {
         configuration.addAnnotatedClass(FacturadeDB.Facturade.Client.Client.class);
         configuration.addAnnotatedClass(FacturadeDB.Facturade.Product.Product.class);
         configuration.addAnnotatedClass(FacturadeDB.Facturade.Factures.Facture.class);
+    }
+
+    public Configuration getConfiguration(){
+        return this.configuration;
     }
 }

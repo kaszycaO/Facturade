@@ -1,18 +1,15 @@
 package FacturadeDB.Facturade.UI;
 
 import FacturadeDB.Database.DB_Management.HibernateFactory;
-import net.sf.ehcache.hibernate.HibernateUtil;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import org.hibernate.service.spi.ServiceException;
 import javax.swing.*;
-import java.lang.module.Configuration;
+
+import static java.lang.System.exit;
 
 public class LoginToDatabaseFrame {
-    /*LoginToDatabaseFrame(){
+    public LoginToDatabaseFrame(){
         final JTextField loginField = new JTextField();
         final JTextField passwordField = new JTextField();
 
@@ -20,16 +17,25 @@ public class LoginToDatabaseFrame {
           "Login :", loginField, "Password :", passwordField
         };
 
-        JOptionPane.showConfirmDialog(null, inputs,"Log in",JOptionPane.OK_CANCEL_OPTION);
 
         while(true) {
+            int messageDialog = JOptionPane.showConfirmDialog(null, inputs,"Log in",JOptionPane.OK_CANCEL_OPTION);
+
+            if(messageDialog == JOptionPane.CANCEL_OPTION){
+                exit(0);
+            }
             if (loginField.getText().equals("") || passwordField.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "Nie wypelniles wszystkich pol!");
+                JOptionPane.showMessageDialog(null, "Some fields are empty!");
             } else {
                 try {
-                    checkLoginAndPassword(loginField.getText(), passwordField.getText());
-                    userLogIn();
-                    break;
+                    boolean approved = approvedLoginAndPassword(loginField.getText(), passwordField.getText());
+                    if(approved){
+                        userLogIn();
+                        break;
+                    }
+                    else{
+                        passwordField.setText("");
+                    }
                 } catch (NumberFormatException ex2) {
                     JOptionPane.showMessageDialog(null, "Wprowadziles bledne dane(Login lub haslo)!");
                 }
@@ -38,38 +44,24 @@ public class LoginToDatabaseFrame {
         }
     }
 
-    private void checkLoginAndPassword(String login, String password){
-        Configuration
-        configuration.configure();
+    private boolean approvedLoginAndPassword(String login, String password){
+        try{
+            HibernateFactory.username = login;
+            HibernateFactory.password = password;
+            HibernateFactory factory = new HibernateFactory();
 
-        StandardServiceRegistryBuilder registryBuilder =
-                new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
-        SessionFactory sessionFactory =  config.configuration.buildSessionFactory(registryBuilder.build());
-        User result = null;
-
-        Session session = HibernateUtil
-        String sql = "select s from User where username=:username and password=password(:password)";
-        Query query = session.createQuery(sql);
-        query.setString("username", login);
-        query.setString("password", password);
-
-        result = (User) query.uniqueResult();
+            StandardServiceRegistryBuilder registryBuilder =
+                    new StandardServiceRegistryBuilder().applySettings(factory.getConfiguration().getProperties());
+            SessionFactory sessionFactory =  factory.getConfiguration().buildSessionFactory(registryBuilder.build());
+            sessionFactory.close();
+            return true;
+        }catch (ServiceException ex){
+            JOptionPane.showMessageDialog(null,"Wrong username or password!");
+            return false;
+        }
     }
 
     private void userLogIn(){
 
     }
-
-    private Configuration getConfigurationForLogIn(){
-        Configuration configuration = new Configuration();
-        configuration.setProperty("hibernate.connection.driver_class","com.mysql.cj.jdbc.Driver");
-        configuration.setProperty("hibernate.connection.url","jdbc:mysql://localhost:3306/FacturadeDB");
-        configuration.setProperty("hibernate.connection.username",username);
-        configuration.setProperty("hibernate.connection.password", password);
-        configuration.setProperty("hibernate.show_sql","true");
-        configuration.setProperty("hibernate.dialect","org.hibernate.dialect.MySQLDialect");
-        configuration.addAnnotatedClass(FacturadeDB.Facturade.Client.Client.class);
-        configuration.addAnnotatedClass(FacturadeDB.Facturade.Product.Product.class);
-        configuration.addAnnotatedClass(FacturadeDB.Facturade.Factures.Facture.class);
-    }*/
 }
