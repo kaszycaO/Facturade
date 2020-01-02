@@ -15,7 +15,7 @@ public class FactureDAO implements DAO_Repository<Facture>{
     Session session = factory.getSessionFactory().openSession();
 
     public FactureDAO(){
-        factures = (ArrayList<Facture>) session.createQuery("from Facture ").list();
+        factures = (ArrayList<Facture>) session.createQuery("from Facture").list();
     }
     @Override
     public Optional<Facture> get(long id) {
@@ -31,13 +31,12 @@ public class FactureDAO implements DAO_Repository<Facture>{
 
     public Facture getAllFactureByClientID(int clientID){
         Facture parsedFacture = new Facture();
-        List<Object[]> rows = session.createSQLQuery("SELECT e.ilosc, a.nazwa,a.cena_sztuki FROM FacturadeDB.faktury as e join FacturadeDB.produkty as a on e.id_produktu = a.id where e.id_clienta=:clientID").setParameter("clientName",clientID).list();
+        List<Object[]> rows = session.createSQLQuery("SELECT e.ilosc, a.nazwa,a.cena_sztuki FROM FacturadeDB.faktury as e join FacturadeDB.produkty as a on e.id_produktu = a.id where e.id_clienta=:clientID").setParameter("clientID",clientID).list();
         List<Product> querriedProductList;
 
         for(Object[] row : rows){
             parsedFacture.addproduct(new Product(row[1].toString(),Integer.parseInt(row[2].toString()),Integer.parseInt(row[0].toString())));
         }
-
         return parsedFacture;
     }
 

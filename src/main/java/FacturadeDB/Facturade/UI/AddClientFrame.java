@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class AddClientFrame {
-	AddClientFrame(final ClientChoiceList clientList){
+	AddClientFrame(ClientChoiceList clientList){
 		final JTextField clientNameF = new JTextField();
 		final JTextField clientSurnameF = new JTextField();
 		final JTextField adressF = new JTextField();
@@ -34,7 +34,7 @@ public class AddClientFrame {
 			}
 			catch(NumberFormatException ex) {
 				try {
-					addNewClient(clientNameF, clientSurnameF, adressF, clientPeselF, clientPostCodeF, clientCityF, clientNIPF);
+					addNewClient(clientNameF, clientSurnameF, adressF, clientPeselF, clientPostCodeF, clientCityF, clientNIPF,clientList);
 				}
 				catch(NumberFormatException ex2) {
 					JOptionPane.showMessageDialog(null, "Wprowadziles bledny NIP!");
@@ -43,15 +43,17 @@ public class AddClientFrame {
 		}
 	}
 
-	private void addNewClient(JTextField clientNameF, JTextField clientSurnameF, JTextField adressF, JTextField clientPeselF, JTextField clientPostCodeF, JTextField clientCityF, JTextField clientNIPF) {
+	private void addNewClient(JTextField clientNameF, JTextField clientSurnameF, JTextField adressF, JTextField clientPeselF, JTextField clientPostCodeF, JTextField clientCityF, JTextField clientNIPF, ClientChoiceList choiceList) {
 		ClientDAO clientDao = new ClientDAO();
 		if(clientNIPF.getText().equals("-")) {
 			Client tester = new Client(clientNameF.getText(),clientSurnameF.getText(),Integer.parseInt(clientPeselF.getText()),adressF.getText(),clientPostCodeF.getText(),clientCityF.getText(),null);
 			clientDao.save(tester);
+			choiceList.reloadClientList();
 		}
 		else {
 			Client tester = new Client(clientNameF.getText(),clientSurnameF.getText(),Integer.parseInt(clientPeselF.getText()),adressF.getText(),clientPostCodeF.getText(),clientCityF.getText(),clientNIPF.getText());
 			clientDao.save(tester);
+			choiceList.reloadClientList();
 		}
 	}
 

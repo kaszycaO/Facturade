@@ -193,7 +193,7 @@ class MainPanel extends JPanel implements ActionListener{
     }
 
     public ClientChoiceList getClientList() {
-        return _clientList;
+        return this._clientList;
     }
 
     public FactureCreator getFacCreator() {

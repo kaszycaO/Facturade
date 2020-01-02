@@ -3,7 +3,6 @@ package FacturadeDB.Database.DB_Management;
 import FacturadeDB.Facturade.Client.Client;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.Optional;
 
 public class ClientDAO implements DAO_Repository<Client>{
 
-    private List<Client> clients;
+    static List<Client> clients;
     private HibernateFactory factory = new HibernateFactory();
     Session session = factory.getSessionFactory().openSession();
 
@@ -70,5 +69,9 @@ public class ClientDAO implements DAO_Repository<Client>{
             session.close();
             factory.getSessionFactory().close();
         }
+    }
+
+    public static List<Client> getClients() {
+        return clients;
     }
 }

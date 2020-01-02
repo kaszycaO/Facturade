@@ -5,7 +5,7 @@
 ----> create Table Klienci (id int AUTO_INCREMENT,imie VARCHAR(32), nazwisko VARCHAR(32), pesel int, NIP int, adres VARCHAR(32), kod_pocztowy VARCHAR(10), miasto VARCHAR(32),  PRIMARY KEY(id))
 ----> create index pesel_idx on Klienci(pesel)
 
-----> create table Faktury (id int primary key, id_clienta int, id_produktu int, ilosc int, data_sprzedazy date);
+----> create table Faktury (id int, id_clienta int, id_produktu int, ilosc int, data_sprzedazy date);
 
 ----> alter table Faktury add Foreign key(id_clienta) references Klienci(id)
 ----> alter table Faktury add Foreign key(id_produktu) references Produkty(id)

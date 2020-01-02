@@ -1,25 +1,27 @@
 package FacturadeDB.Facturade.Factures;
 
+import FacturadeDB.Database.DB_Management.FactureDAO;
 import FacturadeDB.Facturade.Client.Client;
 
 import java.awt.Font;
 
 import FacturadeDB.Facturade.Product.Product;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JTextArea;
 
 public class FactureCreator {
 	private final static String newline = "\n";
-	final private ArrayList<Product> _newProdList;
-	final private JTextArea _printingArea;
+	private ArrayList<Product> _newProdList;
+	private JTextArea _printingArea;
 	
 	
 	public FactureCreator(JTextArea printingArea){
 		_printingArea = printingArea;
 		_newProdList = new ArrayList<>();
-		
 	}
 	
 	public void printFacture(final Client _client) {
@@ -47,7 +49,26 @@ public class FactureCreator {
 	}
 	
 	public void saveFacture(final Client _client) {
-		//_client.addFacture(new Facture(_newProdList, _client.getFactureList().size() + 1,_printingArea.getText()));
+		FactureDAO factureDao = new FactureDAO();
+		int clientID = _client.get_clientID();
+
+		for(Product product : this._newProdList){
+			Facture newFacture = new Facture();
+			newFacture.set_productID(product.get_productID());
+
+			System.out.println("ProductID = " + product.get_productID());
+			newFacture.set_clientID(clientID);
+
+			newFacture.set_prodQuantity(product.get_stockQuantity());
+			newFacture.set_factureDate(null);
+			newFacture.set_factureID(3);
+			factureDao.save(newFacture);
+		}
+		_newProdList.clear();
 		_printingArea.setText("");
+	}
+
+	public void set_newProdList(ArrayList<Product> _newProdList) {
+		this._newProdList = _newProdList;
 	}
 }

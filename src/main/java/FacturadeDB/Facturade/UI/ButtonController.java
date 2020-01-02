@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 public class ButtonController {
-	private final MainPanel _panel;
+	private MainPanel _panel;
 	ButtonController(final MainPanel panel){
 		_panel = panel;
 	}
@@ -23,6 +23,7 @@ public class ButtonController {
 	public void doCertainAction(final String _action) {
 		switch(_action) {
 			case "Save Facture":
+				saveFacture();
 				break;
 			case "Add Product to Facture":
 				addProdToFacture();
@@ -44,9 +45,9 @@ public class ButtonController {
 		}
 	}
 	
-	/*public void saveFacture() {
+	public void saveFacture() {
 		_panel.getFacCreator().saveFacture(_panel.getClientList().getPickedClient());
-	}*/
+	}
 	
 	public void addProdToFacture() {
 		if(_panel.getClientList() != null) {
@@ -111,12 +112,16 @@ public class ButtonController {
 		factureIDs.add(facture.getFactureID());
 
 		final int pickedFactureID = (int) JOptionPane.showInputDialog(null,"Wybierz fakture","Pick Facture for",JOptionPane.PLAIN_MESSAGE,null, (Object [])factureIDs.toArray(),facture);
-		label.setText(facture.getFacInSTR());
+		FactureCreator facCreator = _panel.getFacCreator();
+		facCreator.set_newProdList(facture.getProductListFromFac());
+		facCreator.printFacture(_panel.getClientList().getPickedClient());
+		//label.setText("XDDDDDDDDD");
 	}
 
 	public void createFacture() {
-		final Client _client = _panel.getClientList().getPickedClient();
-		final FactureCreator _facCreator = new FactureCreator(_panel.getFrame().getPrintArea());
+		Client _client = _panel.getClientList().getPickedClient();
+		FactureCreator _facCreator = _panel.getFacCreator();
+		_facCreator.set_newProdList(new ArrayList<>());
 		_facCreator.printFacture(_client);
 	}
 }

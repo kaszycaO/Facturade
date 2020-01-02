@@ -12,6 +12,4 @@ public class FacturadeRun {
 	  MainFacturadeFrame window = new MainFacturadeFrame();
   }
 
-
-
 }
