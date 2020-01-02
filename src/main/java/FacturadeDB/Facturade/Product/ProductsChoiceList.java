@@ -16,6 +16,7 @@ public class ProductsChoiceList extends Choice {
             JOptionPane.showMessageDialog(null, "Taki produkt juz znajduje sie na liscie!" + " [" + _product.getNameOfProduct() + "]");
         } else {
             add(_product.getNameOfProduct() + " [" + _product.getPriceOfProduct() + "]" + " [" + _product.get_stockQuantity() + "]");
+            listOfProducts.add(_product);
         }
     }
 

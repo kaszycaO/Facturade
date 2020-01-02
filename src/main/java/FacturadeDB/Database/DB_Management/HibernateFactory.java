@@ -1,8 +1,5 @@
 package FacturadeDB.Database.DB_Management;
 
-import FacturadeDB.Facturade.Client.Client;
-import FacturadeDB.Facturade.Factures.Facture;
-import FacturadeDB.Facturade.Product.Product;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;

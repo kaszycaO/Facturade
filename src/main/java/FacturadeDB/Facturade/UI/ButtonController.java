@@ -1,8 +1,10 @@
 package FacturadeDB.Facturade.UI;
 
+import FacturadeDB.Database.DB_Management.FactureDAO;
 import FacturadeDB.Database.DB_Management.ProductDAO;
 import FacturadeDB.Facturade.Client.Client;
 import FacturadeDB.Facturade.Client.ClientChoiceList;
+import FacturadeDB.Facturade.Factures.Facture;
 import FacturadeDB.Facturade.Factures.FactureCreator;
 import FacturadeDB.Facturade.Product.Product;
 import FacturadeDB.Facturade.Product.ProductsChoiceList;
@@ -102,16 +104,14 @@ public class ButtonController {
 		final ClientChoiceList _clientList = _panel.getClientList();
 		final JTextArea label = _panel.getFrame().getPrintArea();
 		final ArrayList<Integer> factureIDs = new ArrayList<>();
-		
-		/*for(final Facture _facture :_clientList.getPickedClient().getFactureList()) {
-			factureIDs.add(_facture.getFactureID());
-		}
-		
-		
-		if(_clientList.getPickedClient().getFactureList().size() >= 1) {
-    		final int pickedFactureID = (int) JOptionPane.showInputDialog(null,"Wybierz fakture","Pick Facture for",JOptionPane.PLAIN_MESSAGE,null, (Object [])factureIDs.toArray(),_clientList.getPickedClient().getFactureList().get(0).getFactureID());
-    		label.setText(_clientList.getPickedClient().getFactureList().get(pickedFactureID - 1).getFacInSTR());
-    	}*/
+
+		FactureDAO factureDAO = new FactureDAO();
+		Facture facture = factureDAO.getAllFactureByClientID(_clientList.getPickedClient().get_clientID());
+
+		factureIDs.add(facture.getFactureID());
+
+		final int pickedFactureID = (int) JOptionPane.showInputDialog(null,"Wybierz fakture","Pick Facture for",JOptionPane.PLAIN_MESSAGE,null, (Object [])factureIDs.toArray(),facture);
+		label.setText(facture.getFacInSTR());
 	}
 
 	public void createFacture() {

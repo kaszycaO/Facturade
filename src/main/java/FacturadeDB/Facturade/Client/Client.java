@@ -36,7 +36,6 @@ public class Client implements Serializable {
 		_postCode = postCode;
 		_city = city;
 		_clientNIP = clientNIP;
-		//_factureList = new ArrayList<>();
 	}
 	public int get_clientID(){
 		return this._clientID;

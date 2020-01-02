@@ -29,7 +29,7 @@ public class Facture implements Serializable{
 	private ArrayList<Product> _productList;
 
 	public Facture(){};
-	Facture(ArrayList<Product> prodList, int ID, String facSTR){
+	public Facture(ArrayList<Product> prodList, int ID, String facSTR){
 		_productList = prodList;
 		_factureID = ID;
 		_facInSTR = facSTR;
@@ -49,6 +49,10 @@ public class Facture implements Serializable{
 	public String getFacInSTR() {
 		return _facInSTR;
 	}
+
+	public int get_productID(){ return  this._productID; }
+
+	public int get_prodQuantity(){ return this._prodQuantity; }
 	
 	public ArrayList<Product> getProductListFromFac() {
 		return _productList;
