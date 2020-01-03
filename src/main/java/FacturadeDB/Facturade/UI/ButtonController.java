@@ -107,15 +107,28 @@ public class ButtonController {
 		final ArrayList<Integer> factureIDs = new ArrayList<>();
 
 		FactureDAO factureDAO = new FactureDAO();
-		Facture facture = factureDAO.getAllFactureByClientID(_clientList.getPickedClient().get_clientID());
+		ArrayList<Facture> factures = factureDAO.getAllFactureByClientID(_clientList.getPickedClient().get_clientID());
 
-		factureIDs.add(facture.getFactureID());
+		if(factures == null){
+			return;
+		}
 
-		final int pickedFactureID = (int) JOptionPane.showInputDialog(null,"Wybierz fakture","Pick Facture for",JOptionPane.PLAIN_MESSAGE,null, (Object [])factureIDs.toArray(),facture);
+		for(Facture facture : factures){
+			factureIDs.add(facture.getFactureID());
+		}
+
+		final int pickedFactureID = (int) JOptionPane.showInputDialog(null,"Wybierz fakture","Pick Facture for",JOptionPane.PLAIN_MESSAGE,null, (Object [])factureIDs.toArray(),factures.toArray());
 		FactureCreator facCreator = _panel.getFacCreator();
-		facCreator.set_newProdList(facture.getProductListFromFac());
+
+		Facture pickedFacture = new Facture();
+		for(Facture facture : factures){
+			if(pickedFactureID == facture.getFactureID()){
+				pickedFacture = facture;
+			}
+		}
+
+		facCreator.set_newProdList(factures.get(factures.indexOf(pickedFacture)).getProductListFromFac());
 		facCreator.printFacture(_panel.getClientList().getPickedClient());
-		//label.setText("XDDDDDDDDD");
 	}
 
 	public void createFacture() {

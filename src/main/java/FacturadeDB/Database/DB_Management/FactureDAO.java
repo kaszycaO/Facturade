@@ -4,6 +4,8 @@ import FacturadeDB.Facturade.Factures.Facture;
 import FacturadeDB.Facturade.Product.Product;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,15 +31,34 @@ public class FactureDAO implements DAO_Repository<Facture>{
         return this.factures;
     }
 
-    public Facture getAllFactureByClientID(int clientID){
+    public ArrayList<Facture> getAllFactureByClientID(int clientID){
         Facture parsedFacture = new Facture();
-        List<Object[]> rows = session.createSQLQuery("SELECT e.ilosc, a.nazwa,a.cena_sztuki FROM FacturadeDB.faktury as e join FacturadeDB.produkty as a on e.id_produktu = a.id where e.id_clienta=:clientID").setParameter("clientID",clientID).list();
-        List<Product> querriedProductList;
+
+        List<Object[]> rows = session.createSQLQuery("SELECT e.ilosc, a.nazwa,a.cena_sztuki,e.id FROM FacturadeDB.faktury as e join FacturadeDB.produkty as a on e.id_produktu = a.id where e.id_clienta=:clientID").setParameter("clientID",clientID).list();
+        ArrayList<Facture> factureList = new ArrayList<>();
+
+        if(rows.size() == 0){
+            JOptionPane.showMessageDialog(null,"This client does not have any facture!");
+            return null;
+        }
+
+        int id = Integer.parseInt(rows.get(0)[3].toString());
+        int firstID = id;
+
+        parsedFacture.set_factureID(id);
 
         for(Object[] row : rows){
+            if (id != Integer.parseInt(row[3].toString())) {
+                factureList.add(parsedFacture);
+                parsedFacture = new Facture();
+                parsedFacture.set_factureID(Integer.parseInt(row[3].toString()));
+            }
             parsedFacture.addproduct(new Product(row[1].toString(),Integer.parseInt(row[2].toString()),Integer.parseInt(row[0].toString())));
+            id = Integer.parseInt(row[3].toString());
         }
-        return parsedFacture;
+        factureList.add(parsedFacture);
+        return factureList;
+
     }
 
     @Override
