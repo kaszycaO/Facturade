@@ -7,8 +7,8 @@
 
 ----> create table Faktury (id int, id_clienta int, id_produktu int, ilosc int, data_sprzedazy date);
 
-----> alter table Faktury add Foreign key(id_clienta) references Klienci(id)
-----> alter table Faktury add Foreign key(id_produktu) references Produkty(id)
+----> alter table Faktury add Foreign key(id_clienta) references Klienci(id) on delete cascade;
+----> alter table Faktury add Foreign key(id_produktu) references Produkty(id) on delete cascade;
 ----> create index data_idx on Faktury(data_sprzedazy)
 
 ----> create table Produkty (id int auto_increment primary key, nazwa varchar(64), cena_sztuki float, zasoby int);
