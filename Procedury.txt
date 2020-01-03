@@ -1,0 +1,109 @@
+1. removeProduct
+
+DROP procedure IF EXISTS removeProduct;
+
+DELIMITER $$
+CREATE PROCEDURE removeProduct(IN nazwa_produktu VARCHAR(64))
+BEGIN
+
+ IF EXISTS (SELECT nazwa FROM produkty WHERE nazwa = nazwa_produktu) THEN
+
+	SET @table = nazwa_produktu;
+	SET @s = 'DELETE produkty FROM produkty WHERE nazwa = ?';
+    	PREPARE remove FROM @s;
+    	EXECUTE remove USING @table;
+	DEALLOCATE PREPARE remove;
+    ELSE
+	SELECT "blad!";
+ END IF;
+END$$
+
+
+2. removeClient
+
+DROP procedure IF EXISTS removeClient;
+CREATE PROCEDURE removeClient (IN pesel INT)
+BEGIN
+ IF EXISTS (SELECT pesel FROM klienci WHERE klienci.pesel = pesel) THEN
+	SET @table = pesel;
+	SET @s = 'DELETE klienci, faktury FROM klienci INNER JOIN faktury ON klienci.id = faktury.id_klienta WHERE pesel = ?';
+    	PREPARE remove FROM @s;
+    	EXECUTE remove USING @table;
+		DEALLOCATE PREPARE remove;
+    ELSE
+	SELECT "blad!";
+ END IF;
+END$$
+DELIMITER ;
+
+
+3. removeInvoice -> SET SQL_SAFE_UPDATES = 0;
+
+
+DROP procedure IF EXISTS removeInvoice;
+
+DELIMITER $$
+CREATE PROCEDURE removeInvoice(IN id INT)
+BEGIN
+IF EXISTS (SELECT id FROM faktury WHERE faktury.id = id) THEN
+	SET @table = id;
+	SET @s = 'DELETE faktury FROM faktury WHERE id = ?';
+    	PREPARE remove FROM @s;
+    	EXECUTE remove USING @table;
+		DEALLOCATE PREPARE remove;
+    ELSE
+	SELECT "blad!";
+ END IF;
+END$$
+DELIMITER ;
+
+
+4. sale
+
+
+DROP procedure IF EXISTS saleProc;
+
+DELIMITER $$
+CREATE PROCEDURE saleProc(IN discount INT)
+BEGIN
+
+   SET @sale = 1 - discount/100;
+    	START TRANSACTION;
+		SET @helper = 'UPDATE produkty SET cena_sztuki = cena_sztuki * ?';
+		PREPARE main_statement FROM @helper;
+		EXECUTE main_statement USING @sale;
+		DEALLOCATE PREPARE main_statement;
+		IF EXISTS (SELECT cena_sztuki FROM produkty WHERE cena_sztuki < 1) THEN
+			ROLLBACK;
+		ELSE
+			COMMIT;
+		END IF;
+
+END$$
+DELIMITER ;
+
+5. increasePrice
+
+
+DROP procedure IF EXISTS increasePrice;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE increasePrice(IN percentage INT)
+BEGIN
+
+   SET @increase = 1 + percentage/100;
+    	START TRANSACTION;
+		SET @helper = 'UPDATE produkty SET cena_sztuki = cena_sztuki * ?';
+		PREPARE main_statement FROM @helper;
+		EXECUTE main_statement USING @increase;
+		DEALLOCATE PREPARE main_statement;
+		IF EXISTS (SELECT cena_sztuki FROM produkty WHERE cena_sztuki > 50) THEN
+			ROLLBACK;
+		ELSE
+			COMMIT;
+		END IF;
+END$$
+
+DELIMITER ;
+
+

@@ -9,3 +9,4 @@
 - naprawic bug z wyswietlaniem faktury jak jej nie ma
 - [DONE]     naprawic bug z nie-clearowaniem listy
 - lepsze parsowanie w FactureDAO, funkcja : [getAllFactureByClientID]
+- dodac opcje znizki/podwyzki wszystkich produktow (razem z odpowiednimi ifami)
