@@ -6,6 +6,8 @@ import FacturadeDB.Facturade.Client.Client;
 import java.awt.Font;
 
 import FacturadeDB.Facturade.Product.Product;
+import FacturadeDB.Facturade.UI.ClientPanel;
+import FacturadeDB.Facturade.UI.InvoicePanel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,30 +18,37 @@ import javax.swing.JTextArea;
 public class FactureCreator {
 	private final static String newline = "\n";
 	private ArrayList<Product> _newProdList;
-	private JTextArea _printingArea;
+	//private JTextArea _printingArea;
+	private InvoicePanel _invoicePanel;
+
+
+
 	
-	
-	public FactureCreator(JTextArea printingArea){
-		_printingArea = printingArea;
+	public FactureCreator(InvoicePanel invoicePanel){
+		//_printingArea = printingArea;
+		_invoicePanel = invoicePanel;
 		_newProdList = new ArrayList<>();
 	}
 	
 	public void printFacture(final Client _client) {
-		_printingArea.setText("");
-		_printingArea.setFont(new Font("Serif",Font.BOLD,16));
-		_printingArea.append(newline);
-		_printingArea.append("Imie: " + _client.getClientName() + newline + "Nazwisko : " + _client.getClientSurname() + newline + "Adres zamieszkania : " + _client.getClientAdress() + newline + "NIP : " + _client.getClientNIP());
-		_printingArea.append(newline + newline+ newline);
+
+		String clientText = "Kupujący: " + newline + newline + _client.getClientName() + newline + _client.getClientSurname() + newline +  _client.getClientAdress() + newline +  _client.getClientNIP();
+		_invoicePanel.get_clientPanel().setClientText(clientText);
 		
 		int sum = 0;
+		int counter = 0;
 
+
+		_invoicePanel.clearTextAreas();
 		for (Product product : _newProdList) {
-			_printingArea.append(product.getNameOfProduct() + " " + product.getPriceOfProduct() + " " + product.get_stockQuantity() + newline);
+			counter++;
+
+			//TODO ilosc do poprawy
 			sum += product.getPriceOfProduct() * product.get_stockQuantity();
+
+			_invoicePanel.setInvoiceText(counter+"",product.getNameOfProduct(),product.get_stockQuantity()+"",product.getPriceOfProduct()+"",12+"");
 		}
-		
-		_printingArea.append(newline + newline);
-		_printingArea.append("Suma do Zaplaty : " + sum + " [ZL]");
+		_invoicePanel.setFinalPrice(sum+"");
 		
 	}
 	
@@ -65,7 +74,9 @@ public class FactureCreator {
 			factureDao.save(newFacture);
 		}
 		_newProdList.clear();
-		_printingArea.setText("");
+		//_printingArea.setText("");
+		_invoicePanel.clearTextAreas();
+		_invoicePanel.get_clientPanel().clearAreas();
 	}
 
 	public void set_newProdList(ArrayList<Product> _newProdList) {

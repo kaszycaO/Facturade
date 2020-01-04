@@ -27,6 +27,7 @@ class MainPanel extends JPanel implements ActionListener{
     private JLabel _productLabel;
     private JLabel _clientLabel;
     private ButtonController _btnController;
+    private JPanel _printArea;
 
     private Product _pickedProduct;
     private ClientChoiceList _clientList;
@@ -36,6 +37,8 @@ class MainPanel extends JPanel implements ActionListener{
     MainPanel(final MainFacturadeFrame frame) {
         super();
         setLayout(new GridBagLayout());
+        setPreferredSize(new Dimension(800,1080));
+
         _frame = frame;
 
         _productLabel = new JLabel();
@@ -43,7 +46,7 @@ class MainPanel extends JPanel implements ActionListener{
         prodList = new ProductsChoiceList();
         _clientList = new ClientChoiceList();
         _btnController = new ButtonController(this);
-        _facCreator = new FactureCreator(_frame.getPrintArea());
+        _facCreator = new FactureCreator(_frame.get_invoicePanel());
 
         _saveFacBtn = new JButton("Zapisz fakture");
         _saveFacBtn.addActionListener(this);

@@ -83,9 +83,10 @@ public class ButtonController {
             		throw new NumberFormatException("Taka ilosc nie ma sensu");
             	}
 
-				ProductDAO prodDao = new ProductDAO();
-            	prodDao.save(new Product(_splittedInput.get(0),_price,_quantity));
-            	_panel.getProductsList().addProductToList(new Product(_splittedInput.get(0),_price,_quantity));
+				//ProductDAO prodDao = new ProductDAO();
+				//prodDao.save(new Product(_splittedInput.get(0),_price,_quantity));
+				_panel.getProductsList().addProductToList(new Product(_splittedInput.get(0),_price,_quantity));
+
 
         	}
         	catch(NumberFormatException ex) {
@@ -103,7 +104,7 @@ public class ButtonController {
 	
 	public void showFactures() {
 		final ClientChoiceList _clientList = _panel.getClientList();
-		final JTextArea label = _panel.getFrame().getPrintArea();
+		//final JTextArea label = _panel.getFrame().getPrintArea();
 		final ArrayList<Integer> factureIDs = new ArrayList<>();
 
 		FactureDAO factureDAO = new FactureDAO();
