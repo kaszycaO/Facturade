@@ -31,10 +31,23 @@ public class FactureDAO implements DAO_Repository<Facture>{
         return this.factures;
     }
 
+    public int getNewFactureID(){
+
+        List factureID = session.createSQLQuery("SELECT MAX(id) FROM facturadedb.faktury LIMIT 1").list();
+        int id;
+        if(factureID.get(0) != null)
+            id = Integer.parseInt(factureID.get(0).toString());
+        else
+            id = 0;
+
+        return id;
+
+    }
+
     public ArrayList<Facture> getAllFactureByClientID(int clientID){
         Facture parsedFacture = new Facture();
 
-        List<Object[]> rows = session.createSQLQuery("SELECT e.ilosc, a.nazwa,a.cena_sztuki,e.id FROM FacturadeDB.faktury as e join FacturadeDB.produkty as a on e.id_produktu = a.id where e.id_clienta=:clientID").setParameter("clientID",clientID).list();
+        List<Object[]> rows = session.createSQLQuery("CALL facturadedb.showinvoice(:clientID)").setParameter("clientID",clientID).list();
         ArrayList<Facture> factureList = new ArrayList<>();
 
         if(rows.size() == 0){
@@ -53,7 +66,7 @@ public class FactureDAO implements DAO_Repository<Facture>{
                 parsedFacture = new Facture();
                 parsedFacture.set_factureID(Integer.parseInt(row[3].toString()));
             }
-            parsedFacture.addproduct(new Product(row[1].toString(),Integer.parseInt(row[2].toString()),Integer.parseInt(row[0].toString())));
+            parsedFacture.addproduct(new Product(row[1].toString(),Float.parseFloat(row[2].toString()),Integer.parseInt(row[0].toString())));
             id = Integer.parseInt(row[3].toString());
         }
         factureList.add(parsedFacture);

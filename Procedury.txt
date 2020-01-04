@@ -107,3 +107,20 @@ END$$
 DELIMITER ;
 
 
+DROP PROCEDURE IF EXISTS facturadedb.showinvoice;
+
+DELIMITER $$
+CREATE PROCEDURE showinvoice (IN client_id INT)
+BEGIN
+	IF EXISTS (SELECT id FROM klienci WHERE klienci.id = client_id) THEN
+
+		SET @variable = client_id;
+		SET @s = 'SELECT faktury.ilosc, produkty.nazwa, produkty.cena_sztuki, faktury.id FROM faktury INNER JOIN produkty ON faktury.id_produktu = produkty.id WHERE faktury.id_clienta = ?';
+    	PREPARE main_statement FROM @s;
+    	EXECUTE main_statement USING @variable;
+		DEALLOCATE PREPARE main_statement;
+    ELSE
+		SELECT "blad!";
+ 	END IF;
+END$$
+DELIMITER ;

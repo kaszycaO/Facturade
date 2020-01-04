@@ -51,17 +51,17 @@ public class FactureCreator {
 	public void saveFacture(final Client _client) {
 		FactureDAO factureDao = new FactureDAO();
 		int clientID = _client.get_clientID();
+		Facture newFacture = new Facture();
+		newFacture.set_factureID(factureDao.getNewFactureID()+1);
+		newFacture.set_clientID(clientID);
 
 		for(Product product : this._newProdList){
-			Facture newFacture = new Facture();
+
 			newFacture.set_productID(product.get_productID());
 
 			System.out.println("ProductID = " + product.get_productID());
-			newFacture.set_clientID(clientID);
-
 			newFacture.set_prodQuantity(product.get_stockQuantity());
 			newFacture.set_factureDate(null);
-			newFacture.set_factureID(3);
 			factureDao.save(newFacture);
 		}
 		_newProdList.clear();
