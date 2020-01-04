@@ -9,6 +9,7 @@ public class MainFacturadeFrame extends JFrame {
 
     private final InvoicePanel _invoicePanel;
     private MainPanel _panel;
+
     private final long serialVersionUID = 1L;
 
     public MainFacturadeFrame() {

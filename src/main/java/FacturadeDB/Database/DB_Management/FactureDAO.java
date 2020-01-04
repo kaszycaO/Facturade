@@ -44,6 +44,7 @@ public class FactureDAO implements DAO_Repository<Facture>{
 
     }
 
+
     public ArrayList<Facture> getAllFactureByClientID(int clientID){
         Facture parsedFacture = new Facture();
 
@@ -66,7 +67,10 @@ public class FactureDAO implements DAO_Repository<Facture>{
                 parsedFacture = new Facture();
                 parsedFacture.set_factureID(Integer.parseInt(row[3].toString()));
             }
-            parsedFacture.addproduct(new Product(row[1].toString(),Float.parseFloat(row[2].toString()),Integer.parseInt(row[0].toString())));
+            Product newProduct = new Product(row[1].toString(),Float.parseFloat(row[2].toString()),
+                    Integer.parseInt(row[0].toString()));
+            newProduct.set_productID(Integer.parseInt(row[4].toString()));
+            parsedFacture.addproduct(newProduct);
             id = Integer.parseInt(row[3].toString());
         }
         factureList.add(parsedFacture);

@@ -18,16 +18,17 @@ import javax.swing.JTextArea;
 public class FactureCreator {
 	private final static String newline = "\n";
 	private ArrayList<Product> _newProdList;
-	//private JTextArea _printingArea;
 	private InvoicePanel _invoicePanel;
+	private ArrayList<Integer> _currentQuantity;
+
 
 
 
 	
 	public FactureCreator(InvoicePanel invoicePanel){
-		//_printingArea = printingArea;
 		_invoicePanel = invoicePanel;
 		_newProdList = new ArrayList<>();
+		_currentQuantity = new ArrayList<>();
 	}
 	
 	public void printFacture(final Client _client) {
@@ -42,19 +43,56 @@ public class FactureCreator {
 		_invoicePanel.clearTextAreas();
 		for (Product product : _newProdList) {
 			counter++;
+			sum += product.getPriceOfProduct() * findProductQuantity(product.get_productID());
 
-			//TODO ilosc do poprawy
-			sum += product.getPriceOfProduct() * product.get_stockQuantity();
 
-			_invoicePanel.setInvoiceText(counter+"",product.getNameOfProduct(),product.get_stockQuantity()+"",product.getPriceOfProduct()+"",12+"");
+			_invoicePanel.setInvoiceText(counter+"",product.getNameOfProduct(),findProductQuantity(product.get_productID())+"",
+					product.getPriceOfProduct()+"", product.getPriceOfProduct() * findProductQuantity(product.get_productID())+"");
 		}
 		_invoicePanel.setFinalPrice(sum+"");
 		
 	}
 	
 	
-	public void addProduct(final Product _product) {
+	public void addProduct(final Product _product, int currentQuantity) {
 		_newProdList.add(_product);
+		_currentQuantity.add(_product.get_productID());
+		_currentQuantity.add(currentQuantity);
+
+
+	}
+
+	public void removeProduct(final Product product){
+
+		for(int i = 0; i < _currentQuantity.size()/2; i++){
+			if(_currentQuantity.get(2*i)==product.get_productID())
+				_currentQuantity.remove(2*i+1);
+				_currentQuantity.remove(2*i);
+		}
+
+		_newProdList.remove(product);
+
+	}
+
+	public boolean isOnList(int id) {
+
+		for(Product product : this._newProdList) {
+
+			if(product.get_productID() == id)
+				return true;
+		}
+
+		return false;
+	}
+
+	public int findProductQuantity(int productID){
+
+		for(int i = 0; i < _currentQuantity.size()/2; i++){
+
+			if(_currentQuantity.get(2*i)==productID)
+				return _currentQuantity.get(2*i+1);
+		}
+		return -1;
 	}
 	
 	public void saveFacture(final Client _client) {
@@ -68,18 +106,33 @@ public class FactureCreator {
 
 			newFacture.set_productID(product.get_productID());
 
-			System.out.println("ProductID = " + product.get_productID());
-			newFacture.set_prodQuantity(product.get_stockQuantity());
+			newFacture.set_prodQuantity(findProductQuantity(product.get_productID()));
 			newFacture.set_factureDate(null);
 			factureDao.save(newFacture);
 		}
 		_newProdList.clear();
-		//_printingArea.setText("");
+		_currentQuantity.clear();
 		_invoicePanel.clearTextAreas();
 		_invoicePanel.get_clientPanel().clearAreas();
 	}
 
 	public void set_newProdList(ArrayList<Product> _newProdList) {
 		this._newProdList = _newProdList;
+	}
+
+	public void clearCurrentQuantity(){
+
+		_currentQuantity.clear();
+
+	}
+	public void set_currentQuantity()
+	{
+		_currentQuantity.clear();
+		for (Product product : _newProdList) {
+			_currentQuantity.add(product.get_productID());
+			_currentQuantity.add(product.get_stockQuantity());
+
+		}
+
 	}
 }

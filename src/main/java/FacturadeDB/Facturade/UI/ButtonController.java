@@ -50,15 +50,47 @@ public class ButtonController {
 	}
 	
 	public void addProdToFacture() {
+
 		if(_panel.getClientList() != null) {
 			ProductsChoiceList prodList = _panel.getProductsList();
 			Client client = _panel.getClientList().getPickedClient();
 			FactureCreator facCreator = _panel.getFacCreator();
-			
-			if(prodList.getItemCount() >= 1) {
-				facCreator.addProduct(prodList.getPickedProduct());
-				facCreator.printFacture(client);
+			final String input = JOptionPane.showInputDialog(null,"Podaj ilosc");
+			if(input == null) {return;}
+
+			int quantity = Integer.parseInt(input);
+			if(quantity > prodList.getPickedProduct().get_stockQuantity()){
+				JOptionPane.showMessageDialog(null,"Nie ma tylu produktow na stanie!");
+				return;
 			}
+
+			else {
+
+				if(prodList.getItemCount() >= 1) {
+					if(facCreator.isOnList(prodList.getPickedProduct().get_productID())) {
+						int reply = JOptionPane.showConfirmDialog(null, "Czy chcesz usunac wybrany produkt?", "Produkt jest juz na fakturze!", JOptionPane.YES_NO_OPTION);
+						if (reply == JOptionPane.NO_OPTION) {
+							return;
+						}
+						else {
+							facCreator.removeProduct(prodList.getPickedProduct());
+							facCreator.addProduct(prodList.getPickedProduct(),quantity);
+							facCreator.printFacture(client);
+						}
+					}
+					else {
+						facCreator.addProduct(prodList.getPickedProduct(), quantity);
+						facCreator.printFacture(client);
+
+					}
+
+				}
+
+
+			}
+
+			
+
 		}
 	}
 	
@@ -83,8 +115,7 @@ public class ButtonController {
             		throw new NumberFormatException("Taka ilosc nie ma sensu");
             	}
 
-				//ProductDAO prodDao = new ProductDAO();
-				//prodDao.save(new Product(_splittedInput.get(0),_price,_quantity));
+				
 				_panel.getProductsList().addProductToList(new Product(_splittedInput.get(0),_price,_quantity));
 
 
@@ -103,6 +134,7 @@ public class ButtonController {
 	}
 	
 	public void showFactures() {
+
 		final ClientChoiceList _clientList = _panel.getClientList();
 		//final JTextArea label = _panel.getFrame().getPrintArea();
 		final ArrayList<Integer> factureIDs = new ArrayList<>();
@@ -129,12 +161,14 @@ public class ButtonController {
 		}
 
 		facCreator.set_newProdList(factures.get(factures.indexOf(pickedFacture)).getProductListFromFac());
+		facCreator.set_currentQuantity();
 		facCreator.printFacture(_panel.getClientList().getPickedClient());
 	}
 
 	public void createFacture() {
 		Client _client = _panel.getClientList().getPickedClient();
 		FactureCreator _facCreator = _panel.getFacCreator();
+		_facCreator.clearCurrentQuantity();
 		_facCreator.set_newProdList(new ArrayList<>());
 		_facCreator.printFacture(_client);
 	}
