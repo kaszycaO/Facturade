@@ -12,4 +12,4 @@
 - blokada dodawania produktow do faktury, jesli ktos jakas wyswietla
 - [DONE]     BUG: gdy doda sie nowy produkt, to nie mozna go uzyc w fakturze, po restarcie dziala (prawdopodobnie reload listy potrzebny)
 - poprawic optymalizacje zwiazana ze sprawdzaniem ilosci (findProductQuantity())
-- [BUG] problem z wyswietlaniem ilosci po kilkukrotnym usuwaniu
+- [DONE] problem z wyswietlaniem ilosci po kilkukrotnym usuwaniu

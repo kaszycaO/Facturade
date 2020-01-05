@@ -14,8 +14,15 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
+
+
+
+
 public class ButtonController {
 	private MainPanel _panel;
+	private boolean checkIfRemove = false;
+
+
 	ButtonController(final MainPanel panel){
 		_panel = panel;
 	}
@@ -48,48 +55,61 @@ public class ButtonController {
 	public void saveFacture() {
 		_panel.getFacCreator().saveFacture(_panel.getClientList().getPickedClient());
 	}
-	
+
+	private void setQuantityInFacture(ProductsChoiceList productList, Client client, FactureCreator facCreator) {
+
+
+		final String input = JOptionPane.showInputDialog(null, "Podaj ilosc");
+		if (input == null) {
+			return;
+		}
+
+		int quantity = Integer.parseInt(input);
+		if (quantity > productList.getPickedProduct().get_stockQuantity()) {
+			JOptionPane.showMessageDialog(null, "Nie ma tylu produktow na stanie!");
+			return;
+		}
+		else {
+
+			if(checkIfRemove)
+				facCreator.removeProduct(productList.getPickedProduct());
+
+			facCreator.addProduct(productList.getPickedProduct(),quantity);
+			facCreator.printFacture(client);
+
+
+		}
+	}
+
 	public void addProdToFacture() {
 
 		if(_panel.getClientList() != null) {
 			ProductsChoiceList prodList = _panel.getProductsList();
 			Client client = _panel.getClientList().getPickedClient();
 			FactureCreator facCreator = _panel.getFacCreator();
-			final String input = JOptionPane.showInputDialog(null,"Podaj ilosc");
-			if(input == null) {return;}
 
-			int quantity = Integer.parseInt(input);
-			if(quantity > prodList.getPickedProduct().get_stockQuantity()){
-				JOptionPane.showMessageDialog(null,"Nie ma tylu produktow na stanie!");
-				return;
-			}
-
-			else {
-
-				if(prodList.getItemCount() >= 1) {
-					if(facCreator.isOnList(prodList.getPickedProduct().get_productID())) {
-						int reply = JOptionPane.showConfirmDialog(null, "Czy chcesz usunac wybrany produkt?", "Produkt jest juz na fakturze!", JOptionPane.YES_NO_OPTION);
-						if (reply == JOptionPane.NO_OPTION) {
-							return;
-						}
-						else {
-							facCreator.removeProduct(prodList.getPickedProduct());
-							facCreator.addProduct(prodList.getPickedProduct(),quantity);
-							facCreator.printFacture(client);
-						}
+			if(prodList.getItemCount() >= 1) {
+				if(facCreator.isOnList(prodList.getPickedProduct().get_productID())) {
+					int reply = JOptionPane.showConfirmDialog(null, "Czy chcesz zamienić wybrany produkt?", "Produkt jest juz na fakturze!", JOptionPane.YES_NO_OPTION);
+					if (reply == JOptionPane.NO_OPTION) {
+						checkIfRemove = false;
+						return;
 					}
 					else {
-						facCreator.addProduct(prodList.getPickedProduct(), quantity);
+						checkIfRemove = true;
+						setQuantityInFacture(prodList, client, facCreator);
 						facCreator.printFacture(client);
-
+						checkIfRemove = false;
 					}
+				}
+				else {
+
+					setQuantityInFacture(prodList, client, facCreator);
+					facCreator.printFacture(client);
 
 				}
 
-
 			}
-
-			
 
 		}
 	}

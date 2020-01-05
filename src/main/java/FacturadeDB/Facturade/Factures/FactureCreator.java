@@ -63,14 +63,15 @@ public class FactureCreator {
 	}
 
 	public void removeProduct(final Product product){
+		_newProdList.remove(product);
 
 		for(int i = 0; i < _currentQuantity.size()/2; i++){
-			if(_currentQuantity.get(2*i)==product.get_productID())
-				_currentQuantity.remove(2*i+1);
-				_currentQuantity.remove(2*i);
+			if(_currentQuantity.get(2*i)==product.get_productID()) {
+				_currentQuantity.remove(2 * i + 1);
+				_currentQuantity.remove(2 * i);
+				break;
+			}
 		}
-
-		_newProdList.remove(product);
 
 	}
 
@@ -86,10 +87,10 @@ public class FactureCreator {
 	}
 
 	public int findProductQuantity(int productID){
-
 		for(int i = 0; i < _currentQuantity.size()/2; i++){
 
 			if(_currentQuantity.get(2*i)==productID)
+
 				return _currentQuantity.get(2*i+1);
 		}
 		return -1;
