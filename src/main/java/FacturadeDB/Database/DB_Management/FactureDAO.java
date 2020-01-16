@@ -57,7 +57,7 @@ public class FactureDAO implements DAO_Repository<Facture>{
         }
 
         int id = Integer.parseInt(rows.get(0)[3].toString());
-        int firstID = id;
+       // int firstID = id;
 
         parsedFacture.set_factureID(id);
 
@@ -104,6 +104,14 @@ public class FactureDAO implements DAO_Repository<Facture>{
 
     @Override
     public void delete(Facture facture) {
+
+        Session session = factory.getSessionFactory().openSession();
+        int factureID = facture.getFactureID();
+        List<Object[]> rows  = session.createSQLQuery("CALL facturadedb.removeInvoice(:invoiceID)").setParameter("invoiceID",factureID).list();
+        factures.remove(facture);
+
+
+
         /*Session session = factory.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Serializable id = facture.get_clientID();

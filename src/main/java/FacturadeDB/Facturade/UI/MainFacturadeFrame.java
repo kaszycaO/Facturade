@@ -22,6 +22,7 @@ public class MainFacturadeFrame extends JFrame {
 
         add(_panel, BorderLayout.WEST);
         add(_invoicePanel, BorderLayout.EAST);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
 

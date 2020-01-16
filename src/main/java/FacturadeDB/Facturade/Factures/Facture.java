@@ -73,4 +73,8 @@ public class Facture implements Serializable{
 	public void set_productList(ArrayList<Product> _productList) {
 		this._productList = _productList;
 	}
+
+	public int get_clientID() {
+		return _clientID;
+	}
 }

@@ -1,6 +1,7 @@
 package FacturadeDB.Facturade.Factures;
 
 import FacturadeDB.Database.DB_Management.FactureDAO;
+import FacturadeDB.Database.DB_Management.ProductDAO;
 import FacturadeDB.Facturade.Client.Client;
 
 import java.awt.Font;
@@ -90,14 +91,15 @@ public class FactureCreator {
 		for(int i = 0; i < _currentQuantity.size()/2; i++){
 
 			if(_currentQuantity.get(2*i)==productID)
-
 				return _currentQuantity.get(2*i+1);
+
 		}
 		return -1;
 	}
 	
 	public void saveFacture(final Client _client) {
 		FactureDAO factureDao = new FactureDAO();
+		ProductDAO productDao = new ProductDAO();
 		int clientID = _client.get_clientID();
 		Facture newFacture = new Facture();
 		newFacture.set_factureID(factureDao.getNewFactureID()+1);
@@ -108,6 +110,14 @@ public class FactureCreator {
 			newFacture.set_productID(product.get_productID());
 
 			newFacture.set_prodQuantity(findProductQuantity(product.get_productID()));
+
+			String[] args = new String[3];
+			int updatedQuantity = product.get_stockQuantity() - findProductQuantity(product.get_productID());
+			args[2] = product.get_productID()+"";
+			args[1] = updatedQuantity+"";
+			args[0] = "update";
+			productDao.update(null, args);
+
 			newFacture.set_factureDate(null);
 			factureDao.save(newFacture);
 		}

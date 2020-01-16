@@ -28,11 +28,7 @@ public class ProductsChoiceList extends Choice {
 
     public ProductsChoiceList() {
         super();
-        ProductDAO productDAO = new ProductDAO();
-        listOfProducts = productDAO.getAll();
-        for(Product product : listOfProducts){
-            add(product.getNameOfProduct() + " [" + product.getPriceOfProduct() + "]" + " [" + product.get_stockQuantity() + "]");
-        }
+       reloadList();
     }
 
     public Product getProductFromList(final int index) {
@@ -52,5 +48,19 @@ public class ProductsChoiceList extends Choice {
 
         return false;
     }
+
+    public void reloadList() {
+
+        ProductDAO productDAO = new ProductDAO();
+        this.removeAll();
+        listOfProducts = productDAO.getAll();
+        for(Product product : listOfProducts){
+            add(product.getNameOfProduct() + " [" + product.getPriceOfProduct() + "]" + " [" + product.get_stockQuantity() + "]");
+        }
+
+    }
+
+    public void clearList(){ listOfProducts.clear(); }
+
 }
 

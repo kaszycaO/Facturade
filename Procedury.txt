@@ -13,6 +13,7 @@ BEGIN
     	PREPARE remove FROM @s;
     	EXECUTE remove USING @table;
 	DEALLOCATE PREPARE remove;
+	SELECT "done!";
     ELSE
 	SELECT "blad!";
  END IF;
@@ -25,13 +26,18 @@ DROP procedure IF EXISTS removeClient;
 CREATE PROCEDURE removeClient (IN pesel INT)
 BEGIN
  IF EXISTS (SELECT pesel FROM klienci WHERE klienci.pesel = pesel) THEN
-	SET @table = pesel;
-	SET @s = 'DELETE klienci, faktury FROM klienci INNER JOIN faktury ON klienci.id = faktury.id_klienta WHERE pesel = ?';
-    	PREPARE remove FROM @s;
-    	EXECUTE remove USING @table;
-		DEALLOCATE PREPARE remove;
+SET @table = pesel;
+ IF EXISTS (SELECT * FROM faktury INNER JOIN klienci ON klienci.id = faktury.id_clienta WHERE klienci.pesel = pesel) THEN
+	SET @s = 'DELETE klienci, faktury FROM klienci INNER JOIN faktury ON klienci.id = faktury.id_clienta WHERE pesel = ?';
+ ELSE
+    SET @s = 'DELETE klienci FROM klienci WHERE pesel = ?';
+ END IF;
+    PREPARE remove FROM @s;
+    EXECUTE remove USING @table;
+DEALLOCATE PREPARE remove;
+SELECT "done!";
     ELSE
-	SELECT "blad!";
+SELECT "blad!";
  END IF;
 END$$
 DELIMITER ;
@@ -51,6 +57,7 @@ IF EXISTS (SELECT id FROM faktury WHERE faktury.id = id) THEN
     	PREPARE remove FROM @s;
     	EXECUTE remove USING @table;
 		DEALLOCATE PREPARE remove;
+		SELECT "done!";
     ELSE
 	SELECT "blad!";
  END IF;
@@ -124,3 +131,25 @@ BEGIN
  	END IF;
 END$$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS facturadedb.updatequantity;
+
+DELIMITER $$
+$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `facturadedb`.`updatequantity`(IN id_produktu INT, newQuantity INT)
+SET @id = id_produktu;
+SET @quantity = newQuantity;
+START TRANSACTION;
+SET @s = 'UPDATE produkty SET zasoby = ? WHERE id = ?';
+    PREPARE main FROM @s;
+    EXECUTE main USING @quantity, @id;
+	DEALLOCATE PREPARE main;
+
+	IF EXISTS (SELECT zasoby FROM produkty WHERE zasoby < 0) THEN
+	ROLLBACK;
+	ELSE
+	COMMIT;
+	END IF;$$
+DELIMITER ;
+

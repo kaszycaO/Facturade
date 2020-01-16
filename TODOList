@@ -13,3 +13,6 @@
 - [DONE]     BUG: gdy doda sie nowy produkt, to nie mozna go uzyc w fakturze, po restarcie dziala (prawdopodobnie reload listy potrzebny)
 - poprawic optymalizacje zwiazana ze sprawdzaniem ilosci (findProductQuantity())
 - [DONE] problem z wyswietlaniem ilosci po kilkukrotnym usuwaniu
+- poprawic wyglad wyswietlanych tabel
+- dodac przycisk do backupu
+- triggery
