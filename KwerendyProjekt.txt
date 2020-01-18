@@ -24,10 +24,20 @@
                          [Kierownik]
 ----> CREATE USER 'Kierownik'@'localhost' IDENTIFIED BY 'manager';
 ----> GRANT SELECT,INSERT,DELETE,UPDATE ON FacturadeDB.* TO 'Kierownik'@'localhost';
+     GRANT EXECUTE ON PROCEDURE FacturadeDB.updatequantity TO 'Kierownik'@'localhost';
+     GRANT EXECUTE ON PROCEDURE facturadedb.showinvoice TO 'Kierownik'@'localhost';
+     GRANT EXECUTE ON PROCEDURE facturadedb.saleProc TO 'Kierownik'@'localhost';
+     GRANT EXECUTE ON PROCEDURE facturadedb.increasePrice TO 'Kierownik'@'localhost';
+      GRANT EXECUTE ON PROCEDURE facturadedb.removeProduct TO 'Kierownik'@'localhost';
+      GRANT EXECUTE ON PROCEDURE facturadedb.removeClient TO 'Kierownik'@'localhost';
+      GRANT EXECUTE ON PROCEDURE facturadedb.removeInvoice TO 'Kierownik'@'localhost';
+     (GRANT EXECUTE TO 'Kierownik'@'localhost');
 ----> FLUSH PRIVILEGES;
                          [Pracownik]
 ----> CREATE USER 'Pracownik'@'localhost' IDENTIFIED BY 'worm';
 ----> GRANT INSERT,SELECT ON FacturadeDB.faktury TO 'Pracownik'@'localhost';
 ----> GRANT INSERT,SELECT ON FacturadeDB.klienci TO 'Pracownik'@'localhost';
 ----> GRANT SELECT ON FacturadeDB.produkty TO 'Pracownik'@'localhost';
+      GRANT EXECUTE ON PROCEDURE FacturadeDB.updatequantity TO 'Pracownik'@'localhost';
+      GRANT EXECUTE ON PROCEDURE facturadedb.showinvoice TO 'Pracownik'@'localhost';
 ----> FLUSH PRIVILEGES;

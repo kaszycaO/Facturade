@@ -37,7 +37,7 @@ public class AddClientFrame {
 					addNewClient(clientNameF, clientSurnameF, adressF, clientPeselF, clientPostCodeF, clientCityF, clientNIPF,clientList);
 				}
 				catch(NumberFormatException ex2) {
-					JOptionPane.showMessageDialog(null, "Wprowadziles bledny NIP!");
+					JOptionPane.showMessageDialog(null, "Wprowadziles bledne dane!");
 				}
 			}
 		}

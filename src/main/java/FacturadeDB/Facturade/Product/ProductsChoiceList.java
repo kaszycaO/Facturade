@@ -12,11 +12,13 @@ public class ProductsChoiceList extends Choice {
 
     public void addProductToList(Product _product) {
 
+        ProductDAO productDAO = new ProductDAO();
         if (checkIfProductExists(_product)) {
             JOptionPane.showMessageDialog(null, "Taki produkt juz znajduje sie na liscie!" + " [" + _product.getNameOfProduct() + "]");
         } else {
             add(_product.getNameOfProduct() + " [" + _product.getPriceOfProduct() + "]" + " [" + _product.get_stockQuantity() + "]");
             listOfProducts.add(_product);
+            productDAO.save(_product);
         }
     }
 
@@ -26,11 +28,7 @@ public class ProductsChoiceList extends Choice {
 
     public ProductsChoiceList() {
         super();
-        ProductDAO productDAO = new ProductDAO();
-        listOfProducts = productDAO.getAll();
-        for(Product product : listOfProducts){
-            add(product.getNameOfProduct() + " [" + product.getPriceOfProduct() + "]" + " [" + product.get_stockQuantity() + "]");
-        }
+       reloadList();
     }
 
     public Product getProductFromList(final int index) {
@@ -50,5 +48,19 @@ public class ProductsChoiceList extends Choice {
 
         return false;
     }
+
+    public void reloadList() {
+
+        ProductDAO productDAO = new ProductDAO();
+        this.removeAll();
+        listOfProducts = productDAO.getAll();
+        for(Product product : listOfProducts){
+            add(product.getNameOfProduct() + " [" + product.getPriceOfProduct() + "]" + " [" + product.get_stockQuantity() + "]");
+        }
+
+    }
+
+    public void clearList(){ listOfProducts.clear(); }
+
 }
 

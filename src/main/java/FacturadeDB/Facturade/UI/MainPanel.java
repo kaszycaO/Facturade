@@ -24,9 +24,17 @@ class MainPanel extends JPanel implements ActionListener{
     private JButton _addClientBtn;
     private JButton _showFacturesBtn;
     private JButton _saveFacBtn;
+    private JButton _deleteClientBtn;
+    private JButton _deleteInvoiceBtn;
+    private JButton _deleteProductBtn;
+    private JButton _updateQuantityBtn;
+    private JButton _selectButton;
+    private JButton _modifyPriceButton;
+    private JButton _backupButton;
     private JLabel _productLabel;
     private JLabel _clientLabel;
     private ButtonController _btnController;
+    private JPanel _printArea;
 
     private Product _pickedProduct;
     private ClientChoiceList _clientList;
@@ -36,6 +44,8 @@ class MainPanel extends JPanel implements ActionListener{
     MainPanel(final MainFacturadeFrame frame) {
         super();
         setLayout(new GridBagLayout());
+        setPreferredSize(new Dimension(800,1080));
+
         _frame = frame;
 
         _productLabel = new JLabel();
@@ -43,7 +53,7 @@ class MainPanel extends JPanel implements ActionListener{
         prodList = new ProductsChoiceList();
         _clientList = new ClientChoiceList();
         _btnController = new ButtonController(this);
-        _facCreator = new FactureCreator(_frame.getPrintArea());
+        _facCreator = new FactureCreator(_frame.get_invoicePanel());
 
         _saveFacBtn = new JButton("Zapisz fakture");
         _saveFacBtn.addActionListener(this);
@@ -57,6 +67,21 @@ class MainPanel extends JPanel implements ActionListener{
         _showFacturesBtn.addActionListener(this);
         _createFacBtn = new JButton("Stworz nowa fakture dla wybranego uzytkownika");
         _createFacBtn.addActionListener(this);
+        _deleteClientBtn = new JButton("Usun klienta");
+        _deleteClientBtn.addActionListener(this);
+        _deleteInvoiceBtn = new JButton("Usun fakture");
+        _deleteInvoiceBtn.addActionListener(this);
+        _deleteProductBtn = new JButton("Usun produkt");
+        _deleteProductBtn.addActionListener(this);
+        _updateQuantityBtn = new JButton("Dostawa");
+        _updateQuantityBtn.addActionListener(this);
+        _selectButton = new JButton("Wyswietl tabele");
+        _selectButton.addActionListener(this);
+        _modifyPriceButton = new JButton("Modyfikuj cene produktu");
+        _modifyPriceButton.addActionListener(this);
+        _backupButton = new JButton("Backup bazy");
+        _backupButton.addActionListener(this);
+
 
         final GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -94,23 +119,49 @@ class MainPanel extends JPanel implements ActionListener{
         c.gridx = 0;
         c.gridy = 3;
         c.weightx = 0.1;
-        c.weighty = 0.1;
-        c.insets = new Insets(5,20,5,20);
-        add(prodList,c);
+        c.weighty = 0;
+        c.insets = new Insets(5,20,0,20);
+        if(!HibernateFactory.username.equals("Pracownik"))
+            add(_updateQuantityBtn,c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 4;
         c.weightx = 0.1;
         c.weighty = 0;
-        c.insets = new Insets(20,310,20,20);
+        c.insets = new Insets(5,20,0,20);
+        if(!HibernateFactory.username.equals("Pracownik"))
+            add(_deleteProductBtn,c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 5;
+        c.weightx = 0.1;
+        c.weighty = 0;
+        c.insets = new Insets(5,20,0,20);
+        if(!HibernateFactory.username.equals("Pracownik"))
+            add(_modifyPriceButton,c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 6;
+        c.weightx = 0.1;
+        c.weighty = 0.1;
+        c.insets = new Insets(5,20,5,20);
+        add(prodList,c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 7;
+        c.weightx = 0.1;
+        c.weighty = 0.1;
+        c.insets = new Insets(10,310,10,20);
         _clientLabel.setFont(new Font("SansSerif",Font.BOLD,19));
         _clientLabel.setText("Opcje zwiazane z klientem :");
         add(_clientLabel,c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 5;
+        c.gridy = 8;
         c.weightx = 0.1;
         c.weighty = 0;
         c.insets = new Insets(5,20,0,20);
@@ -118,7 +169,7 @@ class MainPanel extends JPanel implements ActionListener{
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 6;
+        c.gridy = 9;
         c.weightx = 0.1;
         c.weighty = 0;
         c.insets = new Insets(5,20,0,20);
@@ -126,7 +177,7 @@ class MainPanel extends JPanel implements ActionListener{
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 7;
+        c.gridy = 10;
         c.weightx = 0.1;
         c.weighty = 0;
         c.insets = new Insets(5,20,0,20);
@@ -134,7 +185,7 @@ class MainPanel extends JPanel implements ActionListener{
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 8;
+        c.gridy = 11;
         c.weightx = 0.1;
         c.weighty = 0;
         c.insets = new Insets(5,20,0,20);
@@ -143,15 +194,51 @@ class MainPanel extends JPanel implements ActionListener{
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 9;
+        c.gridy = 12;
         c.weightx = 0.1;
-        c.weighty = 0.5;
+        c.weighty = 0.1;
         c.insets = new Insets(5,20,0,20);
         add(_clientList,c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 10;
+        c.gridy = 13;
+        c.weightx = 0.1;
+        c.weighty = 0;
+        c.insets = new Insets(5,20,0,20);
+        if(!HibernateFactory.username.equals("Pracownik"))
+            add(_deleteClientBtn,c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 14;
+        c.weightx = 0.1;
+        c.weighty = 0;
+        c.insets = new Insets(5,20,0,20);
+        if(!HibernateFactory.username.equals("Pracownik"))
+             add(_deleteInvoiceBtn,c);
+
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 15;
+        c.weightx = 0.1;
+        c.weighty = 0.2;
+        c.insets = new Insets(5,20,0,20);
+        add(_selectButton,c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 16;
+        c.weightx = 0.1;
+        c.weighty = 0.3;
+        c.insets = new Insets(5,20,0,20);
+        if(HibernateFactory.username.equals("Administrator"))
+        add(_backupButton,c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 17;
         c.weightx = 0.1;
         c.weighty = 0.4;
         c.insets = new Insets(5,360,0,20);
@@ -185,6 +272,29 @@ class MainPanel extends JPanel implements ActionListener{
         else if(event.getSource() == this._createFacBtn) {
             _btnController.doCertainAction("Create Facture");
         }
+        else if(event.getSource() == this._deleteClientBtn) {
+            _btnController.doCertainAction("Delete Client");
+        }
+        else if(event.getSource() == this._deleteInvoiceBtn) {
+            _btnController.doCertainAction("Delete Invoice");
+        }
+        else if(event.getSource() == this._deleteProductBtn) {
+            _btnController.doCertainAction("Delete Product");
+        }
+        else if(event.getSource() == this._updateQuantityBtn) {
+            _btnController.doCertainAction("Do Delivery");
+        }
+        else if(event.getSource() == this._selectButton) {
+            _btnController.doCertainAction("Show");
+        }
+        else if(event.getSource() == this._modifyPriceButton) {
+            _btnController.doCertainAction("Price");
+        }
+        else if(event.getSource() == this._backupButton) {
+            _btnController.doCertainAction("Backup");
+        }
+
+
 
     }
 

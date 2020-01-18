@@ -53,22 +53,11 @@ public class ClientDAO implements DAO_Repository<Client>{
 
     @Override
     public void delete(Client client) {
+
         Session session = factory.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Serializable id = client.get_clientID();
-        Object persistentInstance = session.load(client.getClass(),id);
-        try {
-            session.delete(persistentInstance);
-            session.getTransaction().commit();
-            clients.remove(client);
-        } catch (Exception ex) {
-            transaction.rollback();
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
-        } finally {
-            session.close();
-            factory.getSessionFactory().close();
-        }
+        int clientPesel = client.get_pesel();
+        List<Object[]> rows  = session.createSQLQuery("CALL facturadedb.removeClient(:clientPesel)").setParameter("clientPesel",clientPesel).list();
+        clients.remove(client);
     }
 
     public static List<Client> getClients() {

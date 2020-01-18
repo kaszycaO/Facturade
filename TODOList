@@ -1,12 +1,20 @@
 - ogarnac obsluge wyjatkow,bledow
 - [DONE]     ogarnac klase faktur(tworzenie, wprowadzania do bd itd)
 - [DONE]     zwracanie ID po dodaniu do MYSQL
-- reload informacji po utworzeniu nowej faktury (update stock'u itd.)
-- scrollPane dla Podgladu faktur
+- [Done] reload informacji po utworzeniu nowej faktury (update stock'u itd.)
+- [Done} scrollPane dla Podgladu faktur
 - [DONE]     BUG: jak ktos dodal produkt, to podczas dodawania go wywala OutOfBound Ex, po restarcie apki, wszystko dziala
-- ogarnac obsluge stocku, zeby ktos za duzo nie zamawial itd
-- naprawic dodawanie nowego przedmiotu z listy do faktury
+- [Done} ogarnac obsluge stocku, zeby ktos za duzo nie zamawial itd
+- [DONE] naprawic dodawanie nowego przedmiotu z listy do faktury
 - [DONE]     naprawic bug z wyswietlaniem faktury jak jej nie ma
 - [DONE]     naprawic bug z nie-clearowaniem listy
 - [DONE]     lepsze parsowanie w FactureDAO, funkcja : [getAllFactureByClientID]
-- blokada dodawania produktow do faktury, jesli ktos jakas wyswietla
+- [Done] blokada dodawania produktow do faktury, jesli ktos jakas wyswietla
+- [DONE]     BUG: gdy doda sie nowy produkt, to nie mozna go uzyc w fakturze, po restarcie dziala (prawdopodobnie reload listy potrzebny)
+- [DONE] problem z wyswietlaniem ilosci po kilkukrotnym usuwaniu
+- [DONE] poprawic wyglad wyswietlanych tabel
+- [DONE] naprawic backup
+- [OPCJONALNIE] zrobic uniwersalna sciezke backupu
+- [OPCJONALNIE] zrobic obsluge bledow w sql
+- pesel przekracza zakres inta :(
+- triggery -> zrobilem 1

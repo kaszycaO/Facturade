@@ -9,7 +9,7 @@ public class Product implements Serializable {
 
 	@Id
 	@Column( name = "id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int _productID;
 	@Column( name = "nazwa")
 	private String _name;
@@ -18,7 +18,10 @@ public class Product implements Serializable {
 	@Column(name = "zasoby")
 	private int _stockQuantity;
 
-	public Product(){};
+
+
+
+	public Product(){}
 
 	public Product(String name, float price, int stockQuantity){
 		this._name = name;
@@ -42,6 +45,10 @@ public class Product implements Serializable {
 		return this._stockQuantity;
 	}
 
+	public void set_stockQuantity(int _stockQuantity) {
+		this._stockQuantity = _stockQuantity;
+	}
+
 	public void setProductPrice(float price) {
 		this._price = price;
 	}
@@ -49,8 +56,9 @@ public class Product implements Serializable {
 	public void renameProduct(String name) {
 		this._name = name;
 	}
-	public void set_productID(int quantity){
-		this._stockQuantity = quantity;
+	public void set_productID(int id){
+		this._productID = id;
 	}
+
 
 }

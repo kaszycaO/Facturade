@@ -44,6 +44,7 @@ public class FactureDAO implements DAO_Repository<Facture>{
 
     }
 
+
     public ArrayList<Facture> getAllFactureByClientID(int clientID){
         Facture parsedFacture = new Facture();
 
@@ -56,7 +57,7 @@ public class FactureDAO implements DAO_Repository<Facture>{
         }
 
         int id = Integer.parseInt(rows.get(0)[3].toString());
-        int firstID = id;
+       // int firstID = id;
 
         parsedFacture.set_factureID(id);
 
@@ -66,7 +67,10 @@ public class FactureDAO implements DAO_Repository<Facture>{
                 parsedFacture = new Facture();
                 parsedFacture.set_factureID(Integer.parseInt(row[3].toString()));
             }
-            parsedFacture.addproduct(new Product(row[1].toString(),Float.parseFloat(row[2].toString()),Integer.parseInt(row[0].toString())));
+            Product newProduct = new Product(row[1].toString(),Float.parseFloat(row[2].toString()),
+                    Integer.parseInt(row[0].toString()));
+            newProduct.set_productID(Integer.parseInt(row[4].toString()));
+            parsedFacture.addproduct(newProduct);
             id = Integer.parseInt(row[3].toString());
         }
         factureList.add(parsedFacture);
@@ -100,21 +104,11 @@ public class FactureDAO implements DAO_Repository<Facture>{
 
     @Override
     public void delete(Facture facture) {
-        /*Session session = factory.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Serializable id = facture.get_clientID();
-        Object persistentInstance = session.load(facture.getClass(),id);
-        try {
-            session.delete(persistentInstance);
-            session.getTransaction().commit();
-            factures.remove(facture);
-        } catch (Exception ex) {
-            transaction.rollback();
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
-        } finally {
-            session.close();
-            factory.getSessionFactory().close();
-        }*/
+
+        Session session = factory.getSessionFactory().openSession();
+        int factureID = facture.getFactureID();
+        List<Object[]> rows  = session.createSQLQuery("CALL facturadedb.removeInvoice(:invoiceID)").setParameter("invoiceID",factureID).list();
+        factures.remove(facture);
+
     }
 }
