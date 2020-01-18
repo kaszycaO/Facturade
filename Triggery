@@ -1,0 +1,8 @@
+delimiter $$
+DROP TRIGGER IF EXISTS klient_trigger;
+CREATE TRIGGER klient_trigger AFTER DELETE ON klienci
+FOR EACH ROW
+BEGIN
+DELETE FROM faktury WHERE faktury.id_clienta = OLD.id;
+END; $$
+DELIMITER;

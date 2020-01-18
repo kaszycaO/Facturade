@@ -26,12 +26,8 @@ DROP procedure IF EXISTS removeClient;
 CREATE PROCEDURE removeClient (IN pesel INT)
 BEGIN
  IF EXISTS (SELECT pesel FROM klienci WHERE klienci.pesel = pesel) THEN
-SET @table = pesel;
- IF EXISTS (SELECT * FROM faktury INNER JOIN klienci ON klienci.id = faktury.id_clienta WHERE klienci.pesel = pesel) THEN
-	SET @s = 'DELETE klienci, faktury FROM klienci INNER JOIN faktury ON klienci.id = faktury.id_clienta WHERE pesel = ?';
- ELSE
-    SET @s = 'DELETE klienci FROM klienci WHERE pesel = ?';
- END IF;
+	SET @table = pesel;
+ 	SET @s = 'DELETE klienci FROM klienci WHERE pesel = ?';
     PREPARE remove FROM @s;
     EXECUTE remove USING @table;
 DEALLOCATE PREPARE remove;

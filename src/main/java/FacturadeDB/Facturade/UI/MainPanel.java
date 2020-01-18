@@ -29,6 +29,8 @@ class MainPanel extends JPanel implements ActionListener{
     private JButton _deleteProductBtn;
     private JButton _updateQuantityBtn;
     private JButton _selectButton;
+    private JButton _modifyPriceButton;
+    private JButton _backupButton;
     private JLabel _productLabel;
     private JLabel _clientLabel;
     private ButtonController _btnController;
@@ -75,6 +77,10 @@ class MainPanel extends JPanel implements ActionListener{
         _updateQuantityBtn.addActionListener(this);
         _selectButton = new JButton("Wyswietl tabele");
         _selectButton.addActionListener(this);
+        _modifyPriceButton = new JButton("Modyfikuj cene produktu");
+        _modifyPriceButton.addActionListener(this);
+        _backupButton = new JButton("Backup bazy");
+        _backupButton.addActionListener(this);
 
 
         final GridBagConstraints c = new GridBagConstraints();
@@ -126,10 +132,18 @@ class MainPanel extends JPanel implements ActionListener{
         c.insets = new Insets(5,20,0,20);
         if(!HibernateFactory.username.equals("Pracownik"))
             add(_deleteProductBtn,c);
-
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 5;
+        c.weightx = 0.1;
+        c.weighty = 0;
+        c.insets = new Insets(5,20,0,20);
+        if(!HibernateFactory.username.equals("Pracownik"))
+            add(_modifyPriceButton,c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 6;
         c.weightx = 0.1;
         c.weighty = 0.1;
         c.insets = new Insets(5,20,5,20);
@@ -137,7 +151,7 @@ class MainPanel extends JPanel implements ActionListener{
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 6;
+        c.gridy = 7;
         c.weightx = 0.1;
         c.weighty = 0.1;
         c.insets = new Insets(10,310,10,20);
@@ -147,7 +161,7 @@ class MainPanel extends JPanel implements ActionListener{
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 7;
+        c.gridy = 8;
         c.weightx = 0.1;
         c.weighty = 0;
         c.insets = new Insets(5,20,0,20);
@@ -155,7 +169,7 @@ class MainPanel extends JPanel implements ActionListener{
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 8;
+        c.gridy = 9;
         c.weightx = 0.1;
         c.weighty = 0;
         c.insets = new Insets(5,20,0,20);
@@ -163,7 +177,7 @@ class MainPanel extends JPanel implements ActionListener{
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 9;
+        c.gridy = 10;
         c.weightx = 0.1;
         c.weighty = 0;
         c.insets = new Insets(5,20,0,20);
@@ -171,7 +185,7 @@ class MainPanel extends JPanel implements ActionListener{
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 10;
+        c.gridy = 11;
         c.weightx = 0.1;
         c.weighty = 0;
         c.insets = new Insets(5,20,0,20);
@@ -180,7 +194,7 @@ class MainPanel extends JPanel implements ActionListener{
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 11;
+        c.gridy = 12;
         c.weightx = 0.1;
         c.weighty = 0.1;
         c.insets = new Insets(5,20,0,20);
@@ -188,7 +202,7 @@ class MainPanel extends JPanel implements ActionListener{
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 12;
+        c.gridy = 13;
         c.weightx = 0.1;
         c.weighty = 0;
         c.insets = new Insets(5,20,0,20);
@@ -197,7 +211,7 @@ class MainPanel extends JPanel implements ActionListener{
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 13;
+        c.gridy = 14;
         c.weightx = 0.1;
         c.weighty = 0;
         c.insets = new Insets(5,20,0,20);
@@ -207,15 +221,24 @@ class MainPanel extends JPanel implements ActionListener{
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 14;
+        c.gridy = 15;
         c.weightx = 0.1;
-        c.weighty = 0.3;
+        c.weighty = 0.2;
         c.insets = new Insets(5,20,0,20);
         add(_selectButton,c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 15;
+        c.gridy = 16;
+        c.weightx = 0.1;
+        c.weighty = 0.3;
+        c.insets = new Insets(5,20,0,20);
+        if(HibernateFactory.username.equals("Administrator"))
+        add(_backupButton,c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 17;
         c.weightx = 0.1;
         c.weighty = 0.4;
         c.insets = new Insets(5,360,0,20);
@@ -263,6 +286,12 @@ class MainPanel extends JPanel implements ActionListener{
         }
         else if(event.getSource() == this._selectButton) {
             _btnController.doCertainAction("Show");
+        }
+        else if(event.getSource() == this._modifyPriceButton) {
+            _btnController.doCertainAction("Price");
+        }
+        else if(event.getSource() == this._backupButton) {
+            _btnController.doCertainAction("Backup");
         }
 
 

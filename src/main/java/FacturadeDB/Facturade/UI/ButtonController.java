@@ -1,6 +1,7 @@
 package FacturadeDB.Facturade.UI;
 
 import FacturadeDB.Database.DB_Management.ClientDAO;
+import FacturadeDB.Database.DB_Management.DBBackup;
 import FacturadeDB.Database.DB_Management.FactureDAO;
 import FacturadeDB.Database.DB_Management.ProductDAO;
 import FacturadeDB.Facturade.Client.Client;
@@ -25,6 +26,7 @@ public class ButtonController {
 	private MainPanel _panel;
 
 	private boolean checkIfRemove = false;
+	private boolean makeInvoice = false;
 
 
 	ButtonController(final MainPanel panel) {
@@ -60,19 +62,17 @@ public class ButtonController {
 			case "Delete Client":
 				deleteData("Klient");
 				break;
+				case "Backup":
+					doBackup();
+				break;
 			case "Do Delivery":
 				updateQuantity();
 				break;
+				case "Price":
+				modifyPrice();
+				break;
 			case "Show":
-				Object[] options = {"Klienci", "Produkty"};
-				int n = JOptionPane.showOptionDialog(null,
-						"Wybierz jaka tabele chcesz wyswietlic", "Zasoby",
-						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
-				if (n == 0) {
-					selectAll("klienci");
-				} else if (n == 1) {
-					selectAll("produkty");
-				}
+				selectAll();
 				break;
 			default:
 
@@ -80,7 +80,6 @@ public class ButtonController {
 	}
 
 	private Product prepareProduct() {
-
 
 		Product pickedProduct = new Product();
 		ProductsChoiceList _productList = _panel.getProductsList();
@@ -134,20 +133,32 @@ public class ButtonController {
 	public void saveFacture() {
 		_panel.getFacCreator().saveFacture(_panel.getClientList().getPickedClient());
 		_panel.getProductsList().reloadList();
+		makeInvoice = false;
+
 
 	}
 
 	private void setQuantityInFacture(ProductsChoiceList productList, Client client, FactureCreator facCreator) {
-
+		int quantity;
 		final String input = JOptionPane.showInputDialog(null, "Podaj ilosc");
 		if (input == null) {
 			return;
 		}
-		int quantity = Integer.parseInt(input);
+
+		try{
+			quantity = Integer.parseInt(input);
+		}
+		catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "To nie jest liczba calkowita!");
+			return;
+		}
+
+		if (quantity < 0){JOptionPane.showMessageDialog(null, "To nie ma sensu!"); return;}
 		if (quantity > productList.getPickedProduct().get_stockQuantity()) {
 			JOptionPane.showMessageDialog(null, "Nie ma tylu produktow na stanie!");
 			return;
-		} else {
+		}
+		else {
 
 			if (checkIfRemove)
 				facCreator.removeProduct(productList.getPickedProduct());
@@ -161,7 +172,7 @@ public class ButtonController {
 
 	public void addProdToFacture() {
 
-		if (_panel.getClientList() != null) {
+		if (_panel.getClientList() != null && makeInvoice) {
 			ProductsChoiceList prodList = _panel.getProductsList();
 			Client client = _panel.getClientList().getPickedClient();
 			FactureCreator facCreator = _panel.getFacCreator();
@@ -172,17 +183,17 @@ public class ButtonController {
 					if (reply == JOptionPane.NO_OPTION) {
 						checkIfRemove = false;
 						return;
-					} else {
+					} else if (reply == JOptionPane.YES_OPTION) {
 						checkIfRemove = true;
 						setQuantityInFacture(prodList, client, facCreator);
 						facCreator.printFacture(client);
 						checkIfRemove = false;
 					}
+					else
+						return;
 				} else {
-
 					setQuantityInFacture(prodList, client, facCreator);
 					facCreator.printFacture(client);
-
 				}
 
 			}
@@ -192,7 +203,7 @@ public class ButtonController {
 
 	public void addProdToList() {
 		float _price = 0;
-		int _quantity = 0;
+		int _quantity;
 
 		try {
 
@@ -265,13 +276,14 @@ public class ButtonController {
 		_facCreator.clearCurrentQuantity();
 		_facCreator.set_newProdList(new ArrayList<>());
 		_facCreator.printFacture(_client);
+		makeInvoice = true;
 	}
 
 
 	public void deleteData(String type) {
 
 
-		if (type == "Klient") {
+		if (type.equals("Klient")) {
 			ClientDAO client = new ClientDAO();
 			Client pickedClient = new Client();
 			ClientChoiceList _clientList = _panel.getClientList();
@@ -292,7 +304,7 @@ public class ButtonController {
 
 			client.delete(pickedClient);
 			_clientList.reloadClientList();
-		} else if (type == "Invoice") {
+		} else if (type.equals("Invoice")) {
 			FactureDAO factureDAO = new FactureDAO();
 			Facture pickedFacture = new Facture();
 			List<Facture> factures = factureDAO.getAll();
@@ -312,10 +324,9 @@ public class ButtonController {
 				}
 			}
 
-
 			factureDAO.delete(pickedFacture);
 
-		} else if (type == "Product") {
+		} else if (type.equals("Product")) {
 			ProductDAO productDAO = new ProductDAO();
 			Product pickedProduct = prepareProduct();
 
@@ -325,35 +336,124 @@ public class ButtonController {
 		}
 	}
 
-	public void selectAll(String table) {
+	private void modifyPrice(){
+
+		ProductDAO productDAO = new ProductDAO();
+		String option = "";
+
+		Object[] choose = {"Znizka", "Podwyzka"};
+		int n = JOptionPane.showOptionDialog(null,
+				"Wybierz opcje", "Produkty",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, choose, choose[1]);
+		if (n == 0) {
+			option = "Znizka";
+		} else if (n == 1) {
+			option = "Podwyzka";
+		}
+		else
+			return;
+
+		final String input = JOptionPane.showInputDialog(null, "Podaj procentową zmianę");
+		if (input == null) {
+			return;
+		}
+
+		String args[] = new String[3];
+		args[0] = "modify";
+		args[1] = option;
+		args[2] = input;
+
+		productDAO.update(null,args);
+		_panel.getProductsList().reloadList();
 
 
-		if (table == "produkty") {
+	}
+
+	private void selectAll() {
+		SelectFrame _selectFrame = new SelectFrame();
+		JTextArea[] textAreas = _selectFrame.getTextAreas();
+		String table;
+		Object[] options = {"Klienci", "Produkty"};
+		int k = JOptionPane.showOptionDialog(null,
+				"Wybierz jaka tabele chcesz wyswietlic", "Zasoby",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+		if (k == 0) {
+			table = "klienci";
+		} else if (k == 1) {
+			table = "produkty";
+		}
+		else
+			return;
+
+
+		if (table.equals("produkty")) {
 			ProductDAO productDAO = new ProductDAO();
 			List<Product> products = productDAO.getAll();
-			String info = "";
+			_selectFrame.setTextArea("ID \n" ,textAreas[0]);
+			_selectFrame.setTextArea("Nazwa \n" ,textAreas[1]);
+			_selectFrame.setTextArea("Cena \n" ,textAreas[2]);
+			_selectFrame.setTextArea("Ilosc \n" ,textAreas[3]);
+
 			for (Product product : products) {
-				info += "ID: " + product.get_productID() + "  Nazwa: " + product.getNameOfProduct() + "   Ilosc w magazynie: " + product.get_stockQuantity() + "\n";
+
+				_selectFrame.setTextArea(product.get_productID()+"\n" ,textAreas[0]);
+				_selectFrame.setTextArea( product.getNameOfProduct()+"\n" ,textAreas[1]);
+				_selectFrame.setTextArea(product.getPriceOfProduct()+"\n" ,textAreas[2]);
+				_selectFrame.setTextArea(product.get_stockQuantity()+"\n" ,textAreas[3]);
+
 			}
-			SelectFrame _selectFrame = new SelectFrame();
-			_selectFrame.setTextArea(info);
-		} else if (table == "klienci") {
+			_selectFrame.setVisible(true);
+
+
+		} else if(table.equals("klienci")) {
 			ClientDAO clientDAO = new ClientDAO();
 			List<Client> clients = clientDAO.getAll();
-			String info = "";
-			for (Client client : clients) {
-				info += "ID:   " + client.get_clientID() + "    Imie:   " + client.getClientName() + "   Nazwisko:   " + client.getClientSurname() + "   Adres: " + client.getClientAdress() +
-						"    Kod pocztowy:    " + client.get_postCode() + "    Miasto:    " + client.get_city() + "     NIP     " + client.getClientNIP() + "\n";
-			}
+			_selectFrame.setTextArea("ID \n" ,textAreas[0]);
+			_selectFrame.setTextArea("Imie \n" ,textAreas[1]);
+			_selectFrame.setTextArea("Nazwisko \n" ,textAreas[2]);
+			_selectFrame.setTextArea("Pesel \n" ,textAreas[3]);
+			_selectFrame.setTextArea("Adres \n" ,textAreas[4]);
+			_selectFrame.setTextArea("Kod pocztowy \n" ,textAreas[5]);
+			_selectFrame.setTextArea("Miasto \n" ,textAreas[6]);
+			_selectFrame.setTextArea("NIP \n" ,textAreas[7]);
 
-			SelectFrame _selectFrame = new SelectFrame();
-			_selectFrame.setTextArea(info);
+			for (Client client : clients) {
+
+				_selectFrame.setTextArea(client.get_clientID()+"\n" ,textAreas[0]);
+				_selectFrame.setTextArea(client.getClientName()+"\n" ,textAreas[1]);
+				_selectFrame.setTextArea(client.getClientSurname() +"\n" ,textAreas[2]);
+				_selectFrame.setTextArea(client.get_pesel()+"\n" ,textAreas[3]);
+				_selectFrame.setTextArea(client.getClientAdress()+"\n" ,textAreas[4]);
+				_selectFrame.setTextArea(client.get_postCode()+" \n" ,textAreas[5]);
+				_selectFrame.setTextArea(client.get_city()+"\n" ,textAreas[6]);
+				_selectFrame.setTextArea(client.getClientNIP()+"\n" ,textAreas[7]);
+
+			}
+			_selectFrame.setVisible(true);
+
 		}
 
 	}
 
 
+	private void doBackup(){
+
+		Object[] choose = {"Backup", "Restore"};
+
+		int n = JOptionPane.showOptionDialog(null,
+				"Wybierz opcje", "Baza Danych",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, choose, choose[1]);
+
+		if (n == 0) {
+			DBBackup.Backupdbtosql();
+		} else if (n == 1) {
+			DBBackup.Restoredbfromsql("backup.sql");
+			_panel.getProductsList().reloadList();
+			_panel.getClientList().reloadClientList();
+		}
 
 
+
+	}
 
 }

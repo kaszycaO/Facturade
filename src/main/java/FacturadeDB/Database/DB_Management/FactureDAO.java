@@ -110,23 +110,5 @@ public class FactureDAO implements DAO_Repository<Facture>{
         List<Object[]> rows  = session.createSQLQuery("CALL facturadedb.removeInvoice(:invoiceID)").setParameter("invoiceID",factureID).list();
         factures.remove(facture);
 
-
-
-        /*Session session = factory.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Serializable id = facture.get_clientID();
-        Object persistentInstance = session.load(facture.getClass(),id);
-        try {
-            session.delete(persistentInstance);
-            session.getTransaction().commit();
-            factures.remove(facture);
-        } catch (Exception ex) {
-            transaction.rollback();
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
-        } finally {
-            session.close();
-            factory.getSessionFactory().close();
-        }*/
     }
 }
