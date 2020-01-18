@@ -6,6 +6,7 @@ import FacturadeDB.Facturade.Client.ClientChoiceList;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import java.util.List;
 
 public class AddClientFrame {
 	AddClientFrame(ClientChoiceList clientList){
@@ -45,6 +46,17 @@ public class AddClientFrame {
 
 	private void addNewClient(JTextField clientNameF, JTextField clientSurnameF, JTextField adressF, JTextField clientPeselF, JTextField clientPostCodeF, JTextField clientCityF, JTextField clientNIPF, ClientChoiceList choiceList) {
 		ClientDAO clientDao = new ClientDAO();
+		List<Client> clients = clientDao.getAll();
+		for(Client client : clients){
+			if(client.get_pesel() == Integer.parseInt(clientPeselF.getText())){
+				JOptionPane.showMessageDialog(null,
+						"Istnieje juz klient o takim nr PESEL");
+				return;
+			}
+
+		}
+
+
 		if(clientNIPF.getText().equals("-")) {
 			Client tester = new Client(clientNameF.getText(),clientSurnameF.getText(),Integer.parseInt(clientPeselF.getText()),adressF.getText(),clientPostCodeF.getText(),clientCityF.getText(),null);
 			clientDao.save(tester);

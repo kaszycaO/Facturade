@@ -89,6 +89,9 @@ public class ButtonController {
 			productsIDs.add(product.get_productID());
 		}
 
+        if (_productList.getListOfProducts() == null) {
+            return null;
+        }
 		final int pickedProductID = (int) JOptionPane.showInputDialog(null, "Wybierz produkt", "Pick product for", JOptionPane.PLAIN_MESSAGE, null, (Object[]) productsIDs.toArray(), _productList.getListOfProducts().toArray());
 
 		for (Product product : _productList.getListOfProducts()) {
@@ -104,6 +107,12 @@ public class ButtonController {
 
 		ProductDAO productDAO = new ProductDAO();
 		Product pickedProduct = prepareProduct();
+
+		if(pickedProduct == null){
+            JOptionPane.showMessageDialog(null, "Brak produktow!");
+            return;
+        }
+
 		int parsedInput;
 
 		final String input = JOptionPane.showInputDialog(null, "Podaj ilosc");
@@ -294,6 +303,11 @@ public class ButtonController {
 				clientsIDs.add(klient.get_pesel());
 			}
 
+            if (new_client == null) {
+                JOptionPane.showMessageDialog(null,
+                        "Brak klientow!");
+                return;
+            }
 			final int pickedClientPesel = (int) JOptionPane.showInputDialog(null, "Wybierz klienta", "Pick client for", JOptionPane.PLAIN_MESSAGE, null, (Object[]) clientsIDs.toArray(), new_client.toArray());
 
 			for (Client klient : new_client) {
@@ -313,11 +327,13 @@ public class ButtonController {
 			for (Facture facture : factures) {
 				factureIDs.add(facture.getFactureID());
 			}
-
+            if (factureIDs == null) {
+                JOptionPane.showMessageDialog(null,
+                        "Brak faktur!");
+                return;
+            }
 			final int pickedFactureID = (int) JOptionPane.showInputDialog(null, "Wybierz fakture", "Pick Facture for", JOptionPane.PLAIN_MESSAGE, null, (Object[]) factureIDs.toArray(), factures.toArray());
-			if (factures == null) {
-				return;
-			}
+
 			for (Facture facture : factures) {
 				if (pickedFactureID == facture.getFactureID()) {
 					pickedFacture = facture;
@@ -329,6 +345,10 @@ public class ButtonController {
 		} else if (type.equals("Product")) {
 			ProductDAO productDAO = new ProductDAO();
 			Product pickedProduct = prepareProduct();
+            if(pickedProduct == null){
+                JOptionPane.showMessageDialog(null, "Brak produktow!");
+                return;
+            }
 
 			productDAO.delete(pickedProduct);
 			_panel.getProductsList().reloadList();

@@ -84,8 +84,6 @@ public class ProductDAO implements DAO_Repository<Product> {
         int productID = product.get_productID();
 
         List<Object[]> rows = session.createSQLQuery("CALL facturadedb.removeProduct(:productID)").setParameter("productID", productID).list();
-        System.out.println(rows.get(0)[0].toString());
-
         Products.remove(product);
 
     }
